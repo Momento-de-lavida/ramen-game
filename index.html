@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>라면 끓이기 이야기 순서 & 재구성 게임</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+    :root {
+      --bg: #FFF9ED;
+      --card-bg: #FFFFFF;
+      --primary: #FF8A3D;
+      --primary-dark: #E86A17;
+      --secondary: #4ECDC4;
+      --secondary-dark: #33A89F;
+      --accent: #FFD166;
+      --success: #2EC4B6;
+      --error: #FF595E;
+      --text: #2D3142;
+      --muted: #6C757D;
+      --border: #EAE0D5;
+      --shadow: 0 8px 20px rgba(45, 49, 66, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, #FF9F1C, #FF7B29);
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(255, 123, 41, 0.25);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-wrap h1 {
+      font-family: 'Jua', sans-serif;
+      margin: 0;
+      font-size: 1.6rem;
+      letter-spacing: 0.5px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      font-family: 'Jua', sans-serif;
+      border: none;
+      border-radius: 14px;
+      padding: 10px 18px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.12);
+    }
+
+    .btn-white {
+      background: white;
+      color: var(--primary-dark);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: var(--secondary-dark);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: var(--text);
+    }
+
+    /* Stage Navigation */
+    .stage-nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px;
+      background: #FFF2DC;
+      border-bottom: 2px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .stage-tab {
+      font-family: 'Jua', sans-serif;
+      background: white;
+      border: 2px solid var(--border);
+      color: var(--muted);
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stage-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      transform: scale(1.04);
+      box-shadow: 0 4px 12px rgba(255, 138, 61, 0.3);
+    }
+
+    .stage-tab.completed {
+      border-color: var(--success);
+      color: var(--secondary-dark);
+    }
+
+    .stage-tab.active.completed {
+      color: white;
+    }
+
+    main {
+      flex: 1;
+      max-width: 1140px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .stage-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .stage-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .instruction-banner {
+      background: white;
+      border-radius: 18px;
+      padding: 16px 22px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      border-left: 6px solid var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .instruction-text h2 {
+      font-family: 'Jua', sans-serif;
+      margin: 0 0 4px 0;
+      font-size: 1.35rem;
+      color: var(--primary-dark);
+    }
+
+    .instruction-text p {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    /* Slots Grid (Stage 1) */
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 820px) {
+      .slots-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .slot-box {
+      background: #FFFDF9;
+      border: 3px dashed #D5C7B8;
+      border-radius: 18px;
+      min-height: 225px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .slot-box.drag-over {
+      background: #FFF0D9;
+      border-color: var(--primary);
+      transform: scale(1.02);
+    }
+
+    .slot-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--accent);
+      color: var(--text);
+      font-family: 'Jua', sans-serif;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      z-index: 5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    .slot-placeholder {
+      color: #B5A89B;
+      font-family: 'Jua', sans-serif;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    /* Card Pool */
+    .pool-section {
+      background: #F4ECE1;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .pool-title {
+      font-family: 'Jua', sans-serif;
+      font-size: 1.15rem;
+      margin: 0 0 12px 6px;
+      color: #5C5046;
+    }
+
+    .cards-pool {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .cards-pool {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .story-card {
+      background: white;
+      border-radius: 14px;
+      padding: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      border: 3px solid transparent;
+      cursor: grab;
+      transition: transform 0.15s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .story-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .story-card.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(255, 138, 61, 0.25);
+    }
+
+    .story-card.correct {
+      border-color: var(--success);
+      background: #F0FDFB;
+    }
+
+    .story-card.wrong {
+      border-color: var(--error);
+      animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .card-art {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #FFF9ED;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-art svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .action-bar {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    /* Stage 2: Scene Announcer */
+    .announcer-box {
+      background: white;
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    @media (max-width: 780px) {
+      .announcer-box {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .announcer-visual {
+      position: relative;
+      border: 4px solid var(--accent);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #FFF9ED;
+    }
+
+    .announcer-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .scene-counter {
+      font-family: 'Jua', sans-serif;
+      font-size: 1.3rem;
+      color: var(--primary-dark);
+      background: #FFF2DC;
+      padding: 6px 14px;
+      border-radius: 12px;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .student-input {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.15rem;
+      font-family: 'Noto Sans KR', sans-serif;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .student-input:focus {
+      border-color: var(--primary);
+    }
+
+    .hint-box {
+      background: #F8F9FA;
+      border-radius: 14px;
+      padding: 14px;
+      min-height: 64px;
+      border: 2px dashed #DEE2E6;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .keyword-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .keyword-chip {
+      background: var(--accent);
+      color: var(--text);
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 1rem;
+    }
+
+    .answer-sentence {
+      font-family: 'Jua', sans-serif;
+      font-size: 1.35rem;
+      color: var(--secondary-dark);
+    }
+
+    /* Stage 3: Stepping Stones (Flip Cards) */
+    .difficulty-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .flip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 820px) {
+      .flip-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .flip-card {
+      perspective: 1000px;
+      height: 250px;
+      cursor: pointer;
+    }
+
+    .flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.55s;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-front, .flip-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: white;
+      border: 3px solid var(--border);
+    }
+
+    .flip-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(135deg, #4ECDC4, #33A89F);
+      color: white;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-color: var(--secondary-dark);
+    }
+
+    .flip-back .q-mark {
+      font-family: 'Jua', sans-serif;
+      font-size: 4rem;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .flip-caption {
+      font-family: 'Jua', sans-serif;
+      font-size: 1.05rem;
+      text-align: center;
+      color: var(--text);
+      margin-top: 6px;
+    }
+
+    /* Stage 4: Story Chef */
+    .chef-box {
+      background: white;
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .topic-pill {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      font-family: 'Jua', sans-serif;
+      font-size: 1.6rem;
+      padding: 10px 28px;
+      border-radius: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(255, 138, 61, 0.3);
+    }
+
+    .connectors-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .connector-chip {
+      background: #FFF2DC;
+      border: 2px solid var(--accent);
+      color: var(--text);
+      font-family: 'Jua', sans-serif;
+      font-size: 1.25rem;
+      padding: 10px 20px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .connector-chip.used {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .connector-arrow {
+      font-size: 1.3rem;
+      color: var(--muted);
+      font-weight: bold;
+    }
+
+    .story-textarea {
+      width: 100%;
+      max-width: 760px;
+      height: 150px;
+      padding: 16px;
+      font-size: 1.15rem;
+      font-family: 'Noto Sans KR', sans-serif;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      resize: vertical;
+      margin-bottom: 16px;
+    }
+
+    .full-script-reveal {
+      max-width: 760px;
+      margin: 18px auto 0;
+      background: #F0FDFB;
+      border: 2px solid var(--success);
+      border-radius: 16px;
+      padding: 18px;
+      text-align: left;
+      display: none;
+    }
+
+    .full-script-reveal ol {
+      margin: 8px 0 0 0;
+      padding-left: 24px;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+
+    /* Modal (Teacher Checklist & Celebration) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 22px;
+      max-width: 540px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h3 {
+      font-family: 'Jua', sans-serif;
+      margin: 0;
+      font-size: 1.4rem;
+      color: var(--primary-dark);
+    }
+
+    .eval-item {
+      margin-bottom: 16px;
+    }
+
+    .eval-item label.q-title {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .radio-pill {
+      background: #F8F9FA;
+      border: 2px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .radio-pill input {
+      margin-right: 4px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2D3142;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-family: 'Jua', sans-serif;
+      font-size: 1.1rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="title-wrap">
+    <span style="font-size: 2rem;">🍜</span>
+    <h1>라면 끓이기 이야기 게임</h1>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-white" onclick="openChecklist()">📋 선생님 체크표</button>
+  </div>
+</header>
+
+<nav class="stage-nav">
+  <button class="stage-tab active" data-stage="1" onclick="switchStage(1)">1단계: 탐정 추리 (순서 배열)</button>
+  <button class="stage-tab" data-stage="2" onclick="switchStage(2)">2단계: 장면 아나운서 (문장 표현)</button>
+  <button class="stage-tab" data-stage="3" onclick="switchStage(3)">3단계: 마법의 징검다리 (부분 회상)</button>
+  <button class="stage-tab" data-stage="4" onclick="switchStage(4)">4단계: 이야기 요리사 (단서 없이 말하기)</button>
+</nav>
+
+<main>
+  <!-- STAGE 1 -->
+  <section id="stage-1" class="stage-panel active">
+    <div class="instruction-banner">
+      <div class="instruction-text">
+        <h2>🕵️ 1단계: 탐정 추리 게임</h2>
+        <p>아래 그림 카드를 <strong>클릭하거나 끌어다 놓아</strong> 1번부터 6번까지 알맞은 순서대로 맞춰보세요!</p>
+      </div>
+      <button class="btn btn-accent" onclick="resetStage1()">🔄 카드 다시 섞기</button>
+    </div>
+
+    <div class="slots-grid" id="slots-grid"></div>
+
+    <div class="pool-section">
+      <div class="pool-title">🃏 섞여 있는 그림 카드 (카드를 누른 뒤 위 번호 칸을 눌러보세요)</div>
+      <div class="cards-pool" id="cards-pool"></div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn btn-primary" style="font-size: 1.25rem; padding: 12px 28px;" onclick="checkStage1()">✅ 정답 확인!</button>
+      <button class="btn btn-secondary" id="to-stage-2-btn" style="display:none; font-size: 1.25rem; padding: 12px 28px;" onclick="switchStage(2)">다음 2단계로 가기 ➡️</button>
+    </div>
+  </section>
+
+  <!-- STAGE 2 -->
+  <section id="stage-2" class="stage-panel">
+    <div class="instruction-banner">
+      <div class="instruction-text">
+        <h2>🎤 2단계: 장면 아나운서</h2>
+        <p>그림을 보고 어떤 행동인지 <strong>문장으로 말하거나</strong> 아래 칸에 직접 적어보세요.</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-white" onclick="prevScene2()">⬅️ 이전 그림</button>
+        <button class="btn btn-white" onclick="nextScene2()">다음 그림 ➡️</button>
+      </div>
+    </div>
+
+    <div class="announcer-box">
+      <div class="announcer-visual" id="announcer-art"></div>
+      <div class="announcer-controls">
+        <span class="scene-counter" id="scene2-counter">장면 1 / 6</span>
+        <input type="text" class="student-input" id="scene2-input" placeholder="여기에 문장을 직접 적어볼까요? (예: 냄비에 물을 붓습니다.)" />
+        
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-accent" onclick="showKeywordHint()">💡 핵심 단어 힌트</button>
+          <button class="btn btn-secondary" onclick="showFullAnswer2()">👀 정답 문장 보기</button>
+          <button class="btn btn-primary" onclick="speakScene2()">🔊 목소리로 듣기</button>
+        </div>
+
+        <div class="hint-box" id="scene2-hint-box">
+          <span style="color: var(--muted);">버튼을 누르면 힌트 단어와 정답 문장이 나타납니다.</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; margin-top:8px;">
+          <button class="btn btn-white" onclick="prevScene2()">⬅️ 이전</button>
+          <button class="btn btn-primary" id="scene2-next-btn" onclick="nextScene2()">다음 장면 ➡️</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 3 -->
+  <section id="stage-3" class="stage-panel">
+    <div class="instruction-banner">
+      <div class="instruction-text">
+        <h2>🌉 3단계: 마법의 징검다리</h2>
+        <p>뒤집힌 카드(❓)의 그림을 <strong>기억해서 말한 뒤</strong>, 카드를 클릭해 정답을 확인해보세요!</p>
+      </div>
+      <div class="difficulty-bar" style="margin:0;">
+        <span style="font-family:'Jua'; color:var(--text);">가릴 카드 수:</span>
+        <button class="btn btn-accent" onclick="setupStage3(2)">2장 가리기</button>
+        <button class="btn btn-accent" onclick="setupStage3(3)">3장 가리기</button>
+        <button class="btn btn-accent" onclick="setupStage3(4)">4장 가리기</button>
+      </div>
+    </div>
+
+    <div class="flip-grid" id="flip-grid"></div>
+
+    <div class="action-bar" style="margin-top:24px;">
+      <button class="btn btn-secondary" style="font-size:1.2rem;" onclick="switchStage(4)">마지막 4단계로 가기 ➡️</button>
+    </div>
+  </section>
+
+  <!-- STAGE 4 -->
+  <section id="stage-4" class="stage-panel">
+    <div class="instruction-banner">
+      <div class="instruction-text">
+        <h2>👨‍🍳 4단계: 이야기 요리사</h2>
+        <p>그림 없이 아래 <strong>순서 연결 말(접속사)</strong>을 하나씩 누르며 처음부터 끝까지 이야기를 들려주세요!</p>
+      </div>
+      <button class="btn btn-white" onclick="resetConnectors()">🔄 연결 말 초기화</button>
+    </div>
+
+    <div class="chef-box">
+      <div class="topic-pill">주제: 라면 끓이기</div>
+
+      <div class="connectors-row">
+        <button class="connector-chip" onclick="toggleConnector(this)">1. 먼저</button>
+        <span class="connector-arrow">➔</span>
+        <button class="connector-chip" onclick="toggleConnector(this)">2. 그다음에</button>
+        <span class="connector-arrow">➔</span>
+        <button class="connector-chip" onclick="toggleConnector(this)">3. 그리고</button>
+        <span class="connector-arrow">➔</span>
+        <button class="connector-chip" onclick="toggleConnector(this)">4. 계속해서</button>
+        <span class="connector-arrow">➔</span>
+        <button class="connector-chip" onclick="toggleConnector(this)">5. 다 익으면</button>
+        <span class="connector-arrow">➔</span>
+        <button class="connector-chip" onclick="toggleConnector(this)">6. 마지막으로</button>
+      </div>
+
+      <div>
+        <textarea class="story-textarea" id="stage4-text" placeholder="아동이 말한 이야기를 선생님이 받아 적거나, 아동이 직접 전체 이야기를 글로 정리해 볼 수 있습니다."></textarea>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn btn-secondary" onclick="toggleFullScript()">📖 전체 정답 이야기 확인</button>
+        <button class="btn btn-primary" onclick="speakFullStory()">🔊 전체 이야기 듣기</button>
+        <button class="btn btn-accent" onclick="openChecklist()">📋 수업 평가 체크하기</button>
+      </div>
+
+      <div class="full-script-reveal" id="full-script-box">
+        <strong style="font-family:'Jua'; font-size:1.2rem; color:var(--secondary-dark);">🍜 라면 끓이기 전체 이야기 예시</strong>
+        <ol>
+          <li><strong>먼저,</strong> 냄비에 물을 붓습니다.</li>
+          <li><strong>그다음에,</strong> 가스레인지 불을 켜고 물을 끓입니다.</li>
+          <li><strong>그리고,</strong> 끓는 물에 면과 스프를 넣습니다.</li>
+          <li><strong>계속해서,</strong> 젓가락으로 면을 저으며 끓입니다.</li>
+          <li><strong>다 익으면,</strong> 불을 끄고 그릇에 라면을 담습니다.</li>
+          <li><strong>마지막으로,</strong> 식탁에 앉아 라면을 맛있게 먹습니다.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Teacher Evaluation Modal -->
+<div class="modal-backdrop" id="checklist-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>📋 아동 수행 관찰 체크표</h3>
+      <button class="btn btn-white" style="padding:4px 10px;" onclick="closeChecklist()">✖</button>
+    </div>
+
+    <div class="eval-item">
+      <label class="q-title">1. 순서 배열 정확도 (숫자 힌트 없이 6장 배열)</label>
+      <div class="radio-group">
+        <label class="radio-pill"><input type="radio" name="eval1" value="스스로 6장 모두 성공"> 스스로 성공</label>
+        <label class="radio-pill"><input type="radio" name="eval1" value="일부 힌트 후 성공"> 일부 도움 후 성공</label>
+        <label class="radio-pill"><input type="radio" name="eval1" value="3장 축소 과제 필요"> 3장 연습 필요</label>
+      </div>
+    </div>
+
+    <div class="eval-item">
+      <label class="q-title">2. 문장 구성 요소 (도구/재료 + 행동 서술어 산출)</label>
+      <div class="radio-group">
+        <label class="radio-pill"><input type="radio" name="eval2" value="완전한 문장으로 표현"> 완전한 문장 표현</label>
+        <label class="radio-pill"><input type="radio" name="eval2" value="단어 나열 위주"> 단어 위주 표현</label>
+        <label class="radio-pill"><input type="radio" name="eval2" value="모델링 따라 말하기"> 따라 말하기 수준</label>
+      </div>
+    </div>
+
+    <div class="eval-item">
+      <label class="q-title">3. 시간 순서 접속사 사용 (먼저, 그다음에, 마지막으로 등)</label>
+      <div class="radio-group">
+        <label class="radio-pill"><input type="radio" name="eval3" value="2개 이상 자발적 사용"> 2개 이상 자발 사용</label>
+        <label class="radio-pill"><input type="radio" name="eval3" value="칩 제시 시 사용 가능"> 칩 보고 사용</label>
+        <label class="radio-pill"><input type="radio" name="eval3" value="접속사 생략"> 생략함</label>
+      </div>
+    </div>
+
+    <div class="action-bar" style="margin-top:20px;">
+      <button class="btn btn-primary" onclick="copyEvalReport()">📄 평가 결과 텍스트 복사</button>
+      <button class="btn btn-white" onclick="closeChecklist()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // 6 Scenes Data with custom warm illustrations (SVG)
+  const SCENES = [
+    {
+      id: 1,
+      sentence: "냄비에 물을 붓습니다.",
+      keywords: ["냄비", "물", "붓습니다"],
+      connector: "먼저",
+      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#FFF7E8"/>
+        <!-- Counter & Sink -->
+        <rect x="0" y="155" width="320" height="85" fill="#E6CCB2"/>
+        <rect x="95" y="162" width="130" height="22" rx="6" fill="#ADB5BD"/>
+        <!-- Faucet -->
+        <path d="M125 162 L125 95 Q125 75 145 75 Q165 75 165 95" fill="none" stroke="#6C757D" stroke-width="10" stroke-linecap="round"/>
+        <!-- Water stream -->
+        <path d="M165 98 L165 145" stroke="#4CC9F0" stroke-width="10" stroke-linecap="round" stroke-dasharray="6 4"/>
+        <!-- Pot -->
+        <rect x="125" y="135" width="80" height="42" rx="6" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
+        <rect x="113" y="143" width="12" height="8" rx="3" fill="#2B2D42"/>
+        <rect x="205" y="143" width="12" height="8" rx="3" fill="#2B2D42"/>
+        <ellipse cx="165" cy="138" rx="36" ry="6" fill="#90E0EF"/>
+        <!-- Child -->
+        <circle cx="245" cy="95" r="26" fill="#FFD6BA"/>
+        <path d="M220 88 Q245 60 270 88 Q272 72 245 66 Q218 72 220 88 Z" fill="#4A3525"/>
+        <circle cx="236" cy="94" r="3" fill="#2B2D42"/>
+        <circle cx="252" cy="94" r="3" fill="#2B2D42"/>
+        <path d="M240 104 Q245 109 250 104" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M218 122 L272 122 L278 165 L212 165 Z" fill="#FFD166"/>
+        <!-- Ramen Pack on counter -->
+        <rect x="25" y="128" width="52" height="36" rx="5" fill="#E63946" stroke="#2B2D42" stroke-width="2"/>
+        <text x="51" y="151" font-size="13" font-weight="bold" fill="#FFD166" text-anchor="middle">라면</text>
+      </svg>`
+    },
+    {
+      id: 2,
+      sentence: "가스레인지 불을 켜고 물을 끓입니다.",
+      keywords: ["가스레인지", "불을 켜고", "물을 끓입니다"],
+      connector: "그다음에",
+      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#FFF7E8"/>
+        <!-- Stove -->
+        <rect x="20" y="160" width="280" height="80" fill="#DEE2E6"/>
+        <rect x="55" y="148" width="130" height="14" rx="4" fill="#495057"/>
+        <!-- Knob -->
+        <circle cx="75" cy="185" r="11" fill="#FF595E" stroke="#2B2D42" stroke-width="2.5"/>
+        <line x1="75" y1="185" x2="82" y2="178" stroke="white" stroke-width="3"/>
+        <!-- Fire -->
+        <path d="M110 148 Q115 130 122 148 Q128 126 135 148 Q142 126 148 148 Q155 130 160 148 Z" fill="#FF7B00"/>
+        <path d="M118 148 Q124 136 130 148 Q136 134 142 148 Q148 136 152 148 Z" fill="#FFD166"/>
+        <!-- Pot -->
+        <rect x="95" y="96" width="80" height="42" rx="6" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
+        <rect x="83" y="104" width="12" height="8" rx="3" fill="#2B2D42"/>
+        <rect x="175" y="104" width="12" height="8" rx="3" fill="#2B2D42"/>
+        <!-- Steam -->
+        <path d="M120 86 Q114 74 122 62" fill="none" stroke="#ADB5BD" stroke-width="3" stroke-linecap="round"/>
+        <path d="M145 86 Q151 74 143 62" fill="none" stroke="#ADB5BD" stroke-width="3" stroke-linecap="round"/>
+        <!-- Mom supervising safely -->
+        <circle cx="240" cy="82" r="27" fill="#FFD6BA"/>
+        <path d="M210 86 Q212 46 240 46 Q268 46 270 86 L272 112 L208 112 Z" fill="#5C4033"/>
+        <circle cx="240" cy="85" r="24" fill="#FFD6BA"/>
+        <circle cx="231" cy="84" r="3" fill="#2B2D42"/>
+        <circle cx="248" cy="84" r="3" fill="#2B2D42"/>
+        <path d="M234 95 Q240 101 246 95" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M208 114 L272 114 L278 165 L202 165 Z" fill="#F28482"/>
+      </svg>`
+    },
+    {
+      id: 3,
+      sentence: "끓는 물에 면과 스프를 넣습니다.",
+      keywords: ["끓는 물", "면과 스프", "넣습니다"],
+      connector: "그리고",
+      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#FFF7E8"/>
+        <rect x="0" y="175" width="320" height="65" fill="#DEE2E6"/>
+        <!-- Boiling Pot -->
+        <rect x="105" y="125" width="110" height="52" rx="8" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
+        <ellipse cx="160" cy="126" rx="52" ry="10" fill="#4CC9F0"/>
+        <!-- Bubbles -->
+        <circle cx="135" cy="124" r="5" fill="white" opacity="0.8"/>
+        <circle cx="182" cy="125" r="6" fill="white" opacity="0.8"/>
+        <!-- Noodle Block dropping -->
+        <rect x="155" y="65" width="46" height="36" rx="6" fill="#FFD166" stroke="#E09F3E" stroke-width="2.5" transform="rotate(14 155 65)"/>
+        <path d="M160 76 Q172 72 184 76 Q192 80 198 76" fill="none" stroke="#E09F3E" stroke-width="2"/>
+        <path d="M158 86 Q170 82 182 86 Q190 90 196 86" fill="none" stroke="#E09F3E" stroke-width="2"/>
+        <!-- Soup Packet pouring -->
+        <rect x="102" y="52" width="34" height="42" rx="4" fill="#E63946" transform="rotate(-22 102 52)"/>
+        <circle cx="136" cy="98" r="2.5" fill="#D62828"/>
+        <circle cx="141" cy="106" r="2.5" fill="#D62828"/>
+        <circle cx="138" cy="113" r="2.5" fill="#D62828"/>
+        <!-- Steam -->
+        <path d="M85 110 Q75 95 85 80" fill="none" stroke="#ADB5BD" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M235 110 Q245 95 235 80" fill="none" stroke="#ADB5BD" stroke-width="3.5" stroke-linecap="round"/>
+      </svg>`
+    },
+    {
+      id: 4,
+      sentence: "젓가락으로 면을 저으며 끓입니다.",
+      keywords: ["젓가락", "면을 저으며", "끓입니다"],
+      connector: "계속해서",
+      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#FFF7E8"/>
+        <rect x="0" y="180" width="320" height="60" fill="#DEE2E6"/>
+        <!-- Child -->
+        <circle cx="160" cy="70" r="26" fill="#FFD6BA"/>
+        <path d="M134 64 Q160 36 186 64 Q188 48 160 42 Q132 48 134 64 Z" fill="#4A3525"/>
+        <circle cx="151" cy="69" r="3" fill="#2B2D42"/>
+        <circle cx="169" cy="69" r="3" fill="#2B2D42"/>
+        <path d="M155 79 Q160 84 165 79" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M126 98 L194 98 L202 145 L118 145 Z" fill="#FFD166"/>
+        <!-- Pot with red soup & noodles -->
+        <rect x="105" y="132" width="110" height="50" rx="8" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
+        <ellipse cx="160" cy="133" rx="52" ry="10" fill="#E63946"/>
+        <!-- Wavy noodles -->
+        <path d="M135 132 Q145 115 155 132 Q165 115 175 132" fill="none" stroke="#FFD166" stroke-width="4" stroke-linecap="round"/>
+        <!-- Chopsticks -->
+        <line x1="115" y1="88" x2="156" y2="132" stroke="#8D5B4C" stroke-width="4" stroke-linecap="round"/>
+        <line x1="122" y1="82" x2="162" y2="130" stroke="#8D5B4C" stroke-width="4" stroke-linecap="round"/>
+      </svg>`
+    },
+    {
+      id: 5,
+      sentence: "불을 끄고 그릇에 라면을 담습니다.",
+      keywords: ["불을 끄고", "그릇", "라면을 담습니다"],
+      connector: "다 익으면",
+      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#FFF7E8"/>
+        <rect x="0" y="175" width="320" height="65" fill="#E6CCB2"/>
+        <!-- Mom with oven mitts pouring -->
+        <circle cx="225" cy="72" r="25" fill="#FFD6BA"/>
+        <path d="M197 76 Q199 38 225 38 Q251 38 253 76 L255 102 L195 102 Z" fill="#5C4033"/>
+        <circle cx="225" cy="75" r="22" fill="#FFD6BA"/>
+        <circle cx="217" cy="74" r="2.8" fill="#2B2D42"/>
+        <circle cx="233" cy="74" r="2.8" fill="#2B2D42"/>
+        <path d="M220 84 Q225 89 230 84" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M195 102 L255 102 L262 175 L188 175 Z" fill="#F28482"/>
+        <!-- Tilted Pot -->
+        <g transform="rotate(-28 155 115)">
+          <rect x="120" y="95" width="72" height="38" rx="6" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
+          <rect x="192" y="102" width="16" height="18" rx="6" fill="#FFB703" stroke="#2B2D42" stroke-width="2"/>
+        </g>
+        <!-- Noodles & Soup pouring into bowl -->
+        <path d="M122 122 Q115 142 118 158" fill="none" stroke="#FFD166" stroke-width="6" stroke-linecap="round"/>
+        <path d="M128 124 Q122 144 125 158" fill="none" stroke="#E63946" stroke-width="4" stroke-linecap="round"/>
+        <!-- Serving Bowl -->
+        <path d="M75 155 Q75 188 120 188 Q165 188 165 155 Z" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
+        <ellipse cx="120" cy="155" rx="45" ry="7" fill="#E63946"/>
+      </svg>`
+    },
+    {
+      id: 6,
+      sentence: "식탁에 앉아 라면을 맛있게 먹습니다.",
+      keywords: ["식탁에 앉아", "라면", "맛있게 먹습니다"],
+      connector: "마지막으로",
+      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="240" fill="#FFF7E8"/>
+        <!-- Happy Child -->
+        <circle cx="160" cy="76" r="28" fill="#FFD6BA"/>
+        <path d="M132 70 Q160 40 188 70 Q190 52 160 46 Q130 52 132 70 Z" fill="#4A3525"/>
+        <!-- Smiling Eyes -->
+        <path d="M146 74 Q151 69 156 74" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M164 74 Q169 69 174 74" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Happy Mouth -->
+        <path d="M152 84 Q160 95 168 84 Z" fill="#E63946"/>
+        <path d="M122 106 L198 106 L206 165 L114 165 Z" fill="#FFD166"/>
+        <!-- Dining Table -->
+        <rect x="20" y="165" width="280" height="75" rx="8" fill="#DDA15E"/>
+        <!-- Bowl on table -->
+        <path d="M118 142 Q118 174 160 174 Q202 174 202 142 Z" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
+        <ellipse cx="160" cy="142" rx="42" ry="7" fill="#E63946"/>
+        <!-- Noodles lifted with chopsticks -->
+        <path d="M152 142 L152 104 L166 142" fill="none" stroke="#FFD166" stroke-width="4"/>
+        <line x1="142" y1="102" x2="188" y2="108" stroke="#8D5B4C" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="142" y1="108" x2="188" y2="112" stroke="#8D5B4C" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- Sparkles -->
+        <text x="82" y="95" font-size="22">✨</text>
+        <text x="218" y="95" font-size="22">😋</text>
+      </svg>`
+    }
+  ];
+
+  // Sound Effects using Web Audio API (No external files needed)
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playTone(freq, type, duration, delay = 0) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime + delay);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(audioCtx.currentTime + delay);
+    osc.stop(audioCtx.currentTime + delay + duration);
+  }
+
+  function playSuccessSound() {
+    playTone(523.25, 'sine', 0.15, 0);
+    playTone(659.25, 'sine', 0.15, 0.12);
+    playTone(783.99, 'sine', 0.3, 0.24);
+  }
+
+  function playErrorSound() {
+    playTone(220, 'triangle', 0.2, 0);
+    playTone(180, 'triangle', 0.25, 0.15);
+  }
+
+  function playClickSound() {
+    playTone(440, 'sine', 0.08, 0);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // Stage Switching
+  function switchStage(stageNum) {
+    playClickSound();
+    document.querySelectorAll('.stage-tab').forEach(tab => {
+      tab.classList.toggle('active', Number(tab.dataset.stage) === stageNum);
+    });
+    document.querySelectorAll('.stage-panel').forEach(panel => {
+      panel.classList.remove('active');
+    });
+    document.getElementById(`stage-${stageNum}`).classList.add('active');
+
+    if (stageNum === 2) renderScene2();
+    if (stageNum === 3 && document.getElementById('flip-grid').children.length === 0) {
+      setupStage3(2);
+    }
+  }
+
+  // ==================== STAGE 1: ORDERING ====================
+  let slotsState = [null, null, null, null, null, null];
+  let selectedCardId = null;
+
+  function initStage1() {
+    const slotsGrid = document.getElementById('slots-grid');
+    slotsGrid.innerHTML = '';
+    for (let i = 0; i < 6; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'slot-box';
+      slot.dataset.index = i;
+      slot.innerHTML = `
+        <div class="slot-badge">${i + 1}</div>
+        <div class="slot-placeholder">여기에 ${i + 1}번째 그림</div>
+      `;
+      slot.addEventListener('click', () => handleSlotClick(i));
+      slot.addEventListener('dragover', e => {
+        e.preventDefault();
+        slot.classList.add('drag-over');
+      });
+      slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+      slot.addEventListener('drop', e => {
+        e.preventDefault();
+        slot.classList.remove('drag-over');
+        const cardId = Number(e.dataTransfer.getData('text/plain'));
+        placeCardInSlot(cardId, i);
+      });
+      slotsGrid.appendChild(slot);
+    }
+    resetStage1();
+  }
+
+  function resetStage1() {
+    slotsState = [null, null, null, null, null, null];
+    selectedCardId = null;
+    document.getElementById('to-stage-2-btn').style.display = 'none';
+    const shuffled = [...SCENES].sort(() => Math.random() - 0.5);
+    renderStage1(shuffled);
+  }
+
+  function renderStage1(poolOrder = null) {
+    const slots = document.querySelectorAll('.slot-box');
+    slots.forEach((slot, idx) => {
+      const cardId = slotsState[idx];
+      if (cardId) {
+        const scene = SCENES.find(s => s.id === cardId);
+        slot.innerHTML = `
+          <div class="slot-badge">${idx + 1}</div>
+          <div class="story-card" style="box-shadow:none; padding:2px;" draggable="true">
+            <div class="card-art">${scene.svg}</div>
+          </div>
+        `;
+      } else {
+        slot.innerHTML = `
+          <div class="slot-badge">${idx + 1}</div>
+          <div class="slot-placeholder">여기에 ${idx + 1}번째 그림</div>
+        `;
+      }
+    });
+
+    const pool = document.getElementById('cards-pool');
+    const currentPoolIds = poolOrder
+      ? poolOrder.map(s => s.id)
+      : SCENES.map(s => s.id).filter(id => !slotsState.includes(id));
+
+    pool.innerHTML = '';
+    currentPoolIds.forEach(id => {
+      if (slotsState.includes(id)) return;
+      const scene = SCENES.find(s => s.id === id);
+      const card = document.createElement('div');
+      card.className = 'story-card' + (selectedCardId === id ? ' selected' : '');
+      card.draggable = true;
+      card.innerHTML = `<div class="card-art">${scene.svg}</div>`;
+      card.addEventListener('click', () => {
+        playClickSound();
+        selectedCardId = (selectedCardId === id) ? null : id;
+        renderStage1();
+      });
+      card.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', id);
+      });
+      pool.appendChild(card);
+    });
+  }
+
+  function handleSlotClick(slotIdx) {
+    playClickSound();
+    if (selectedCardId !== null) {
+      placeCardInSlot(selectedCardId, slotIdx);
+      selectedCardId = null;
+    } else if (slotsState[slotIdx] !== null) {
+      // Return card to pool
+      slotsState[slotIdx] = null;
+      renderStage1();
+    }
+  }
+
+  function placeCardInSlot(cardId, slotIdx) {
+    // Remove card if already in another slot
+    const existingIdx = slotsState.indexOf(cardId);
+    if (existingIdx !== -1) slotsState[existingIdx] = null;
+    slotsState[slotIdx] = cardId;
+    playClickSound();
+    renderStage1();
+  }
+
+  function checkStage1() {
+    if (slotsState.includes(null)) {
+      playErrorSound();
+      showToast("6칸에 그림을 모두 채워주세요!");
+      return;
+    }
+    let allCorrect = true;
+    const slots = document.querySelectorAll('.slot-box');
+    slotsState.forEach((cardId, idx) => {
+      const cardEl = slots[idx].querySelector('.story-card');
+      if (cardId === idx + 1) {
+        cardEl.classList.add('correct');
+      } else {
+        allCorrect = false;
+        cardEl.classList.add('wrong');
+        setTimeout(() => {
+          slotsState[idx] = null;
+          renderStage1();
+        }, 750);
+      }
+    });
+
+    if (allCorrect) {
+      playSuccessSound();
+      showToast("🎉 대단해요! 라면 끓이기 순서를 완벽하게 맞췄어요!");
+      document.querySelector('.stage-tab[data-stage="1"]').classList.add('completed');
+      document.getElementById('to-stage-2-btn').style.display = 'inline-flex';
+    } else {
+      playErrorSound();
+      showToast("앗! 빨간색으로 표시된 카드의 순서를 다시 생각해 볼까요?");
+    }
+  }
+
+  // ==================== STAGE 2: SCENE ANNOUNCER ====================
+  let currentScene2Idx = 0;
+
+  function renderScene2() {
+    const scene = SCENES[currentScene2Idx];
+    document.getElementById('scene2-counter').textContent = `장면 ${currentScene2Idx + 1} / 6`;
+    document.getElementById('announcer-art').innerHTML = scene.svg;
+    document.getElementById('scene2-input').value = '';
+    document.getElementById('scene2-hint-box').innerHTML =
+      `<span style="color: var(--muted);">그림을 보고 문장을 말해보세요. 도움이 필요하면 힌트 버튼을 눌러요!</span>`;
+
+    const nextBtn = document.getElementById('scene2-next-btn');
+    if (currentScene2Idx === 5) {
+      nextBtn.textContent = "3단계로 이동하기 ➡️";
+      nextBtn.onclick = () => {
+        document.querySelector('.stage-tab[data-stage="2"]').classList.add('completed');
+        switchStage(3);
+      };
+    } else {
+      nextBtn.textContent = "다음 장면 ➡️";
+      nextBtn.onclick = nextScene2;
+    }
+  }
+
+  function prevScene2() {
+    if (currentScene2Idx > 0) {
+      playClickSound();
+      currentScene2Idx--;
+      renderScene2();
+    }
+  }
+
+  function nextScene2() {
+    if (currentScene2Idx < 5) {
+      playClickSound();
+      currentScene2Idx++;
+      renderScene2();
+    }
+  }
+
+  function showKeywordHint() {
+    playClickSound();
+    const scene = SCENES[currentScene2Idx];
+    const chips = scene.keywords.map(k => `<span class="keyword-chip">${k}</span>`).join('');
+    document.getElementById('scene2-hint-box').innerHTML = `
+      <div style="font-size:0.9rem; color:var(--muted); margin-bottom:4px;">💡 이 단어들을 넣어서 문장을 만들어 보세요:</div>
+      <div class="keyword-chips">${chips}</div>
+    `;
+  }
+
+  function showFullAnswer2() {
+    playSuccessSound();
+    const scene = SCENES[currentScene2Idx];
+    document.getElementById('scene2-hint-box').innerHTML = `
+      <div style="font-size:0.9rem; color:var(--muted);">✅ 모범 문장:</div>
+      <div class="answer-sentence">"${scene.sentence}"</div>
+    `;
+  }
+
+  function speakText(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'ko-KR';
+      utter.rate = 0.9;
+      window.speechSynthesis.speak(utter);
+    } else {
+      showToast("이 브라우저에서는 음성 읽기를 지원하지 않습니다.");
+    }
+  }
+
+  function speakScene2() {
+    speakText(SCENES[currentScene2Idx].sentence);
+  }
+
+  // ==================== STAGE 3: STEPPING STONES ====================
+  function setupStage3(hideCount) {
+    playClickSound();
+    const grid = document.getElementById('flip-grid');
+    grid.innerHTML = '';
+
+    // Pick random indices to flip
+    const indices = [0, 1, 2, 3, 4, 5].sort(() => Math.random() - 0.5);
+    const hiddenSet = new Set(indices.slice(0, hideCount));
+
+    SCENES.forEach((scene, idx) => {
+      const isHidden = hiddenSet.has(idx);
+      const card = document.createElement('div');
+      card.className = 'flip-card' + (isHidden ? ' flipped' : '');
+      card.innerHTML = `
+        <div class="flip-inner">
+          <div class="flip-front">
+            <div class="slot-badge">${idx + 1}</div>
+            <div class="card-art">${scene.svg}</div>
+            <div class="flip-caption">${scene.sentence}</div>
+          </div>
+          <div class="flip-back">
+            <div class="q-mark">❓</div>
+            <div style="font-family:'Jua'; font-size:1.3rem;">${idx + 1}번째 장면</div>
+            <div style="font-size:0.95rem; margin-top:6px; opacity:0.9;">무슨 일이 일어났을까요?<br/>말한 뒤 클릭해서 확인해요!</div>
+          </div>
+        </div>
+      `;
+      card.addEventListener('click', () => {
+        playClickSound();
+        card.classList.toggle('flipped');
+      });
+      grid.appendChild(card);
+    });
+    document.querySelector('.stage-tab[data-stage="3"]').classList.add('completed');
+  }
+
+  // ==================== STAGE 4: STORY CHEF ====================
+  function toggleConnector(btn) {
+    playClickSound();
+    btn.classList.toggle('used');
+  }
+
+  function resetConnectors() {
+    playClickSound();
+    document.querySelectorAll('.connector-chip').forEach(c => c.classList.remove('used'));
+  }
+
+  function toggleFullScript() {
+    playClickSound();
+    const box = document.getElementById('full-script-box');
+    box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+    document.querySelector('.stage-tab[data-stage="4"]').classList.add('completed');
+  }
+
+  function speakFullStory() {
+    const fullText = SCENES.map(s => `${s.connector}, ${s.sentence}`).join(' ');
+    speakText(fullText);
+  }
+
+  // ==================== TEACHER CHECKLIST MODAL ====================
+  function openChecklist() {
+    playClickSound();
+    document.getElementById('checklist-modal').classList.add('open');
+  }
+
+  function closeChecklist() {
+    document.getElementById('checklist-modal').classList.remove('open');
+  }
+
+  function copyEvalReport() {
+    const e1 = document.querySelector('input[name="eval1"]:checked')?.value || '미체크';
+    const e2 = document.querySelector('input[name="eval2"]:checked')?.value || '미체크';
+    const e3 = document.querySelector('input[name="eval3"]:checked')?.value || '미체크';
+    const studentStory = document.getElementById('stage4-text').value.trim();
+
+    let report = `[이야기 재구성 훈련 결과 - 주제: 라면 끓이기]\n`;
+    report += `- 순서 배열 정확도: ${e1}\n`;
+    report += `- 문장 구성 요소: ${e2}\n`;
+    report += `- 시간 순서 접속사: ${e3}\n`;
+    if (studentStory) {
+      report += `- 아동 산출 이야기: "${studentStory}"`;
+    }
+
+    navigator.clipboard.writeText(report).then(() => {
+      playSuccessSound();
+      showToast("📋 평가 결과가 클립보드에 복사되었습니다!");
+      closeChecklist();
+    });
+  }
+
+  // Initialize on load
+  initStage1();
+</script>
+</body>
+</html>
