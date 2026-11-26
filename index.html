@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>라면 끓이기 이야기 순서 & 재구성 게임</title>
+  <title>일상생활 이야기 순서 & 재구성 게임 시리즈</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
@@ -42,7 +42,7 @@
     header {
       background: linear-gradient(135deg, #FF9F1C, #FF7B29);
       color: white;
-      padding: 16px 24px;
+      padding: 14px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -60,7 +60,7 @@
     .title-wrap h1 {
       font-family: 'Jua', sans-serif;
       margin: 0;
-      font-size: 1.6rem;
+      font-size: 1.55rem;
       letter-spacing: 0.5px;
     }
 
@@ -117,12 +117,55 @@
       color: var(--text);
     }
 
+    /* Topic Selector Bar */
+    .topic-bar {
+      background: #FFFFFF;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .topic-label {
+      font-family: 'Jua', sans-serif;
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      margin-right: 4px;
+    }
+
+    .topic-btn {
+      font-family: 'Jua', sans-serif;
+      background: #FFF9ED;
+      border: 2px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 16px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .topic-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .topic-btn.active {
+      background: var(--secondary);
+      border-color: var(--secondary-dark);
+      color: white;
+      transform: scale(1.04);
+      box-shadow: 0 4px 10px rgba(78, 205, 196, 0.35);
+    }
+
     /* Stage Navigation */
     .stage-nav {
       display: flex;
       justify-content: center;
       gap: 10px;
-      padding: 16px;
+      padding: 14px 16px;
       background: #FFF2DC;
       border-bottom: 2px solid var(--border);
       flex-wrap: wrap;
@@ -616,7 +659,7 @@
       line-height: 1.8;
     }
 
-    /* Modal (Teacher Checklist & Celebration) */
+    /* Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -715,13 +758,22 @@
 
 <header>
   <div class="title-wrap">
-    <span style="font-size: 2rem;">🍜</span>
-    <h1>라면 끓이기 이야기 게임</h1>
+    <span id="header-icon" style="font-size: 2rem;">🍜</span>
+    <h1 id="header-title">일상생활 이야기 게임: 라면 끓이기</h1>
   </div>
   <div class="header-actions">
     <button class="btn btn-white" onclick="openChecklist()">📋 선생님 체크표</button>
   </div>
 </header>
+
+<div class="topic-bar">
+  <span class="topic-label">📚 주제 선택:</span>
+  <button class="topic-btn active" data-topic="ramen" onclick="selectTopic('ramen')">🍜 라면 끓이기</button>
+  <button class="topic-btn" data-topic="laundry" onclick="selectTopic('laundry')">🧺 세탁기 돌리기</button>
+  <button class="topic-btn" data-topic="morning" onclick="selectTopic('morning')">🏫 아침 등교 준비</button>
+  <button class="topic-btn" data-topic="store" onclick="selectTopic('store')">🏪 편의점 간식 사기</button>
+  <button class="topic-btn" data-topic="plant" onclick="selectTopic('plant')">🌱 화분 씨앗 심기</button>
+</div>
 
 <nav class="stage-nav">
   <button class="stage-tab active" data-stage="1" onclick="switchStage(1)">1단계: 탐정 추리 (순서 배열)</button>
@@ -771,7 +823,7 @@
       <div class="announcer-visual" id="announcer-art"></div>
       <div class="announcer-controls">
         <span class="scene-counter" id="scene2-counter">장면 1 / 6</span>
-        <input type="text" class="student-input" id="scene2-input" placeholder="여기에 문장을 직접 적어볼까요? (예: 냄비에 물을 붓습니다.)" />
+        <input type="text" class="student-input" id="scene2-input" placeholder="여기에 문장을 직접 적어볼까요?" />
         
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn btn-accent" onclick="showKeywordHint()">💡 핵심 단어 힌트</button>
@@ -824,21 +876,9 @@
     </div>
 
     <div class="chef-box">
-      <div class="topic-pill">주제: 라면 끓이기</div>
+      <div class="topic-pill" id="stage4-topic-pill">주제: 라면 끓이기</div>
 
-      <div class="connectors-row">
-        <button class="connector-chip" onclick="toggleConnector(this)">1. 먼저</button>
-        <span class="connector-arrow">➔</span>
-        <button class="connector-chip" onclick="toggleConnector(this)">2. 그다음에</button>
-        <span class="connector-arrow">➔</span>
-        <button class="connector-chip" onclick="toggleConnector(this)">3. 그리고</button>
-        <span class="connector-arrow">➔</span>
-        <button class="connector-chip" onclick="toggleConnector(this)">4. 계속해서</button>
-        <span class="connector-arrow">➔</span>
-        <button class="connector-chip" onclick="toggleConnector(this)">5. 다 익으면</button>
-        <span class="connector-arrow">➔</span>
-        <button class="connector-chip" onclick="toggleConnector(this)">6. 마지막으로</button>
-      </div>
+      <div class="connectors-row" id="connectors-row"></div>
 
       <div>
         <textarea class="story-textarea" id="stage4-text" placeholder="아동이 말한 이야기를 선생님이 받아 적거나, 아동이 직접 전체 이야기를 글로 정리해 볼 수 있습니다."></textarea>
@@ -850,17 +890,7 @@
         <button class="btn btn-accent" onclick="openChecklist()">📋 수업 평가 체크하기</button>
       </div>
 
-      <div class="full-script-reveal" id="full-script-box">
-        <strong style="font-family:'Jua'; font-size:1.2rem; color:var(--secondary-dark);">🍜 라면 끓이기 전체 이야기 예시</strong>
-        <ol>
-          <li><strong>먼저,</strong> 냄비에 물을 붓습니다.</li>
-          <li><strong>그다음에,</strong> 가스레인지 불을 켜고 물을 끓입니다.</li>
-          <li><strong>그리고,</strong> 끓는 물에 면과 스프를 넣습니다.</li>
-          <li><strong>계속해서,</strong> 젓가락으로 면을 저으며 끓입니다.</li>
-          <li><strong>다 익으면,</strong> 불을 끄고 그릇에 라면을 담습니다.</li>
-          <li><strong>마지막으로,</strong> 식탁에 앉아 라면을 맛있게 먹습니다.</li>
-        </ol>
-      </div>
+      <div class="full-script-reveal" id="full-script-box"></div>
     </div>
   </section>
 </main>
@@ -910,187 +940,682 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // 6 Scenes Data with custom warm illustrations (SVG)
-  const SCENES = [
-    {
-      id: 1,
-      sentence: "냄비에 물을 붓습니다.",
-      keywords: ["냄비", "물", "붓습니다"],
-      connector: "먼저",
-      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="240" fill="#FFF7E8"/>
-        <!-- Counter & Sink -->
-        <rect x="0" y="155" width="320" height="85" fill="#E6CCB2"/>
-        <rect x="95" y="162" width="130" height="22" rx="6" fill="#ADB5BD"/>
-        <!-- Faucet -->
-        <path d="M125 162 L125 95 Q125 75 145 75 Q165 75 165 95" fill="none" stroke="#6C757D" stroke-width="10" stroke-linecap="round"/>
-        <!-- Water stream -->
-        <path d="M165 98 L165 145" stroke="#4CC9F0" stroke-width="10" stroke-linecap="round" stroke-dasharray="6 4"/>
-        <!-- Pot -->
-        <rect x="125" y="135" width="80" height="42" rx="6" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
-        <rect x="113" y="143" width="12" height="8" rx="3" fill="#2B2D42"/>
-        <rect x="205" y="143" width="12" height="8" rx="3" fill="#2B2D42"/>
-        <ellipse cx="165" cy="138" rx="36" ry="6" fill="#90E0EF"/>
-        <!-- Child -->
-        <circle cx="245" cy="95" r="26" fill="#FFD6BA"/>
-        <path d="M220 88 Q245 60 270 88 Q272 72 245 66 Q218 72 220 88 Z" fill="#4A3525"/>
-        <circle cx="236" cy="94" r="3" fill="#2B2D42"/>
-        <circle cx="252" cy="94" r="3" fill="#2B2D42"/>
-        <path d="M240 104 Q245 109 250 104" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M218 122 L272 122 L278 165 L212 165 Z" fill="#FFD166"/>
-        <!-- Ramen Pack on counter -->
-        <rect x="25" y="128" width="52" height="36" rx="5" fill="#E63946" stroke="#2B2D42" stroke-width="2"/>
-        <text x="51" y="151" font-size="13" font-weight="bold" fill="#FFD166" text-anchor="middle">라면</text>
-      </svg>`
+  const TOPICS = {
+    ramen: {
+      title: "라면 끓이기",
+      icon: "🍜",
+      scenes: [
+        {
+          id: 1,
+          sentence: "냄비에 물을 붓습니다.",
+          keywords: ["냄비", "물", "붓습니다"],
+          connector: "먼저",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFF7E8"/>
+            <rect x="0" y="155" width="320" height="85" fill="#E6CCB2"/>
+            <rect x="95" y="162" width="130" height="22" rx="6" fill="#ADB5BD"/>
+            <path d="M125 162 L125 95 Q125 75 145 75 Q165 75 165 95" fill="none" stroke="#6C757D" stroke-width="10" stroke-linecap="round"/>
+            <path d="M165 98 L165 145" stroke="#4CC9F0" stroke-width="10" stroke-linecap="round" stroke-dasharray="6 4"/>
+            <rect x="125" y="135" width="80" height="42" rx="6" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
+            <ellipse cx="165" cy="138" rx="36" ry="6" fill="#90E0EF"/>
+            <circle cx="245" cy="95" r="26" fill="#FFD6BA"/>
+            <path d="M220 88 Q245 60 270 88 Q272 72 245 66 Q218 72 220 88 Z" fill="#4A3525"/>
+            <circle cx="236" cy="94" r="3" fill="#2B2D42"/>
+            <circle cx="252" cy="94" r="3" fill="#2B2D42"/>
+            <path d="M240 104 Q245 109 250 104" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M218 122 L272 122 L278 165 L212 165 Z" fill="#FFD166"/>
+            <rect x="25" y="128" width="52" height="36" rx="5" fill="#E63946" stroke="#2B2D42" stroke-width="2"/>
+            <text x="51" y="151" font-size="13" font-weight="bold" fill="#FFD166" text-anchor="middle">라면</text>
+          </svg>`
+        },
+        {
+          id: 2,
+          sentence: "가스레인지 불을 켜고 물을 끓입니다.",
+          keywords: ["가스레인지", "불을 켜고", "물을 끓입니다"],
+          connector: "그다음에",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFF7E8"/>
+            <rect x="20" y="160" width="280" height="80" fill="#DEE2E6"/>
+            <rect x="55" y="148" width="130" height="14" rx="4" fill="#495057"/>
+            <circle cx="75" cy="185" r="11" fill="#FF595E" stroke="#2B2D42" stroke-width="2.5"/>
+            <path d="M110 148 Q115 130 122 148 Q128 126 135 148 Q142 126 148 148 Q155 130 160 148 Z" fill="#FF7B00"/>
+            <path d="M118 148 Q124 136 130 148 Q136 134 142 148 Q148 136 152 148 Z" fill="#FFD166"/>
+            <rect x="95" y="96" width="80" height="42" rx="6" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
+            <path d="M120 86 Q114 74 122 62" fill="none" stroke="#ADB5BD" stroke-width="3" stroke-linecap="round"/>
+            <path d="M145 86 Q151 74 143 62" fill="none" stroke="#ADB5BD" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="240" cy="85" r="24" fill="#FFD6BA"/>
+            <path d="M210 86 Q212 46 240 46 Q268 46 270 86 L272 112 L208 112 Z" fill="#5C4033"/>
+            <circle cx="240" cy="85" r="22" fill="#FFD6BA"/>
+            <circle cx="231" cy="84" r="3" fill="#2B2D42"/>
+            <circle cx="248" cy="84" r="3" fill="#2B2D42"/>
+            <path d="M234 95 Q240 101 246 95" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M208 114 L272 114 L278 165 L202 165 Z" fill="#F28482"/>
+          </svg>`
+        },
+        {
+          id: 3,
+          sentence: "끓는 물에 면과 스프를 넣습니다.",
+          keywords: ["끓는 물", "면과 스프", "넣습니다"],
+          connector: "그리고",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFF7E8"/>
+            <rect x="0" y="175" width="320" height="65" fill="#DEE2E6"/>
+            <rect x="105" y="125" width="110" height="52" rx="8" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
+            <ellipse cx="160" cy="126" rx="52" ry="10" fill="#4CC9F0"/>
+            <circle cx="135" cy="124" r="5" fill="white"/>
+            <circle cx="182" cy="125" r="6" fill="white"/>
+            <rect x="155" y="65" width="46" height="36" rx="6" fill="#FFD166" stroke="#E09F3E" stroke-width="2.5" transform="rotate(14 155 65)"/>
+            <rect x="102" y="52" width="34" height="42" rx="4" fill="#E63946" transform="rotate(-22 102 52)"/>
+            <circle cx="136" cy="98" r="2.5" fill="#D62828"/>
+            <circle cx="141" cy="106" r="2.5" fill="#D62828"/>
+            <path d="M85 110 Q75 95 85 80" fill="none" stroke="#ADB5BD" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M235 110 Q245 95 235 80" fill="none" stroke="#ADB5BD" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>`
+        },
+        {
+          id: 4,
+          sentence: "젓가락으로 면을 저으며 끓입니다.",
+          keywords: ["젓가락", "면을 저으며", "끓입니다"],
+          connector: "계속해서",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFF7E8"/>
+            <rect x="0" y="180" width="320" height="60" fill="#DEE2E6"/>
+            <circle cx="160" cy="70" r="26" fill="#FFD6BA"/>
+            <path d="M134 64 Q160 36 186 64 Q188 48 160 42 Q132 48 134 64 Z" fill="#4A3525"/>
+            <circle cx="151" cy="69" r="3" fill="#2B2D42"/>
+            <circle cx="169" cy="69" r="3" fill="#2B2D42"/>
+            <path d="M155 79 Q160 84 165 79" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M126 98 L194 98 L202 145 L118 145 Z" fill="#FFD166"/>
+            <rect x="105" y="132" width="110" height="50" rx="8" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
+            <ellipse cx="160" cy="133" rx="52" ry="10" fill="#E63946"/>
+            <path d="M135 132 Q145 115 155 132 Q165 115 175 132" fill="none" stroke="#FFD166" stroke-width="4" stroke-linecap="round"/>
+            <line x1="115" y1="88" x2="156" y2="132" stroke="#8D5B4C" stroke-width="4" stroke-linecap="round"/>
+            <line x1="122" y1="82" x2="162" y2="130" stroke="#8D5B4C" stroke-width="4" stroke-linecap="round"/>
+          </svg>`
+        },
+        {
+          id: 5,
+          sentence: "불을 끄고 그릇에 라면을 담습니다.",
+          keywords: ["불을 끄고", "그릇", "라면을 담습니다"],
+          connector: "다 익으면",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFF7E8"/>
+            <rect x="0" y="175" width="320" height="65" fill="#E6CCB2"/>
+            <circle cx="225" cy="75" r="22" fill="#FFD6BA"/>
+            <path d="M197 76 Q199 38 225 38 Q251 38 253 76 L255 102 L195 102 Z" fill="#5C4033"/>
+            <circle cx="225" cy="75" r="22" fill="#FFD6BA"/>
+            <circle cx="217" cy="74" r="2.8" fill="#2B2D42"/>
+            <circle cx="233" cy="74" r="2.8" fill="#2B2D42"/>
+            <path d="M195 102 L255 102 L262 175 L188 175 Z" fill="#F28482"/>
+            <g transform="rotate(-28 155 115)">
+              <rect x="120" y="95" width="72" height="38" rx="6" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
+            </g>
+            <path d="M122 122 Q115 142 118 158" fill="none" stroke="#FFD166" stroke-width="6" stroke-linecap="round"/>
+            <path d="M75 155 Q75 188 120 188 Q165 188 165 155 Z" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
+            <ellipse cx="120" cy="155" rx="45" ry="7" fill="#E63946"/>
+          </svg>`
+        },
+        {
+          id: 6,
+          sentence: "식탁에 앉아 라면을 맛있게 먹습니다.",
+          keywords: ["식탁에 앉아", "라면", "맛있게 먹습니다"],
+          connector: "마지막으로",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFF7E8"/>
+            <circle cx="160" cy="76" r="28" fill="#FFD6BA"/>
+            <path d="M132 70 Q160 40 188 70 Q190 52 160 46 Q130 52 132 70 Z" fill="#4A3525"/>
+            <path d="M146 74 Q151 69 156 74" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M164 74 Q169 69 174 74" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M152 84 Q160 95 168 84 Z" fill="#E63946"/>
+            <path d="M122 106 L198 106 L206 165 L114 165 Z" fill="#FFD166"/>
+            <rect x="20" y="165" width="280" height="75" rx="8" fill="#DDA15E"/>
+            <path d="M118 142 Q118 174 160 174 Q202 174 202 142 Z" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
+            <ellipse cx="160" cy="142" rx="42" ry="7" fill="#E63946"/>
+            <path d="M152 142 L152 104 L166 142" fill="none" stroke="#FFD166" stroke-width="4"/>
+            <line x1="142" y1="102" x2="188" y2="108" stroke="#8D5B4C" stroke-width="3.5" stroke-linecap="round"/>
+            <text x="82" y="95" font-size="22">✨</text>
+            <text x="218" y="95" font-size="22">😋</text>
+          </svg>`
+        }
+      ]
     },
-    {
-      id: 2,
-      sentence: "가스레인지 불을 켜고 물을 끓입니다.",
-      keywords: ["가스레인지", "불을 켜고", "물을 끓입니다"],
-      connector: "그다음에",
-      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="240" fill="#FFF7E8"/>
-        <!-- Stove -->
-        <rect x="20" y="160" width="280" height="80" fill="#DEE2E6"/>
-        <rect x="55" y="148" width="130" height="14" rx="4" fill="#495057"/>
-        <!-- Knob -->
-        <circle cx="75" cy="185" r="11" fill="#FF595E" stroke="#2B2D42" stroke-width="2.5"/>
-        <line x1="75" y1="185" x2="82" y2="178" stroke="white" stroke-width="3"/>
-        <!-- Fire -->
-        <path d="M110 148 Q115 130 122 148 Q128 126 135 148 Q142 126 148 148 Q155 130 160 148 Z" fill="#FF7B00"/>
-        <path d="M118 148 Q124 136 130 148 Q136 134 142 148 Q148 136 152 148 Z" fill="#FFD166"/>
-        <!-- Pot -->
-        <rect x="95" y="96" width="80" height="42" rx="6" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
-        <rect x="83" y="104" width="12" height="8" rx="3" fill="#2B2D42"/>
-        <rect x="175" y="104" width="12" height="8" rx="3" fill="#2B2D42"/>
-        <!-- Steam -->
-        <path d="M120 86 Q114 74 122 62" fill="none" stroke="#ADB5BD" stroke-width="3" stroke-linecap="round"/>
-        <path d="M145 86 Q151 74 143 62" fill="none" stroke="#ADB5BD" stroke-width="3" stroke-linecap="round"/>
-        <!-- Mom supervising safely -->
-        <circle cx="240" cy="82" r="27" fill="#FFD6BA"/>
-        <path d="M210 86 Q212 46 240 46 Q268 46 270 86 L272 112 L208 112 Z" fill="#5C4033"/>
-        <circle cx="240" cy="85" r="24" fill="#FFD6BA"/>
-        <circle cx="231" cy="84" r="3" fill="#2B2D42"/>
-        <circle cx="248" cy="84" r="3" fill="#2B2D42"/>
-        <path d="M234 95 Q240 101 246 95" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M208 114 L272 114 L278 165 L202 165 Z" fill="#F28482"/>
-      </svg>`
+    laundry: {
+      title: "세탁기 돌리기",
+      icon: "🧺",
+      scenes: [
+        {
+          id: 1,
+          sentence: "빨래 바구니에서 더러운 옷을 꺼냅니다.",
+          keywords: ["빨래 바구니", "더러운 옷", "꺼냅니다"],
+          connector: "먼저",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F0F8FF"/>
+            <rect x="0" y="185" width="320" height="55" fill="#D8E2DC"/>
+            <!-- Laundry Basket -->
+            <path d="M75 135 L90 195 L165 195 L180 135 Z" fill="#F4A261" stroke="#2B2D42" stroke-width="3"/>
+            <line x1="82" y1="155" x2="173" y2="155" stroke="#E76F51" stroke-width="3"/>
+            <line x1="86" y1="175" x2="169" y2="175" stroke="#E76F51" stroke-width="3"/>
+            <!-- Dirty Shirt with mud spots -->
+            <path d="M105 90 L135 80 L165 90 L175 115 L155 120 L155 145 L115 145 L115 120 L95 115 Z" fill="#A8DADC" stroke="#2B2D42" stroke-width="2.5"/>
+            <circle cx="130" cy="112" r="5" fill="#8D6E63"/>
+            <circle cx="145" cy="126" r="4" fill="#8D6E63"/>
+            <!-- Child -->
+            <circle cx="225" cy="95" r="26" fill="#FFD6BA"/>
+            <path d="M200 88 Q225 60 250 88 Q252 72 225 66 Q198 72 200 88 Z" fill="#4A3525"/>
+            <circle cx="216" cy="94" r="3" fill="#2B2D42"/>
+            <circle cx="232" cy="94" r="3" fill="#2B2D42"/>
+            <path d="M220 104 Q225 109 230 104" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M198 122 L252 122 L258 185 L192 185 Z" fill="#90BE6D"/>
+          </svg>`
+        },
+        {
+          id: 2,
+          sentence: "세탁기 문을 열고 옷을 넣습니다.",
+          keywords: ["세탁기 문", "열고", "옷을 넣습니다"],
+          connector: "그다음에",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F0F8FF"/>
+            <rect x="0" y="195" width="320" height="45" fill="#D8E2DC"/>
+            <!-- Washing Machine -->
+            <rect x="65" y="55" width="135" height="145" rx="12" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
+            <rect x="65" y="55" width="135" height="28" rx="8" fill="#E9ECEF" stroke="#2B2D42" stroke-width="2"/>
+            <circle cx="132" cy="135" r="42" fill="#495057" stroke="#2B2D42" stroke-width="3"/>
+            <!-- Open Door -->
+            <ellipse cx="185" cy="135" rx="18" ry="40" fill="#CAF0F8" stroke="#2B2D42" stroke-width="3" opacity="0.85"/>
+            <!-- Clothes going in -->
+            <path d="M145 125 Q185 110 225 125 L215 148 Q175 135 145 145 Z" fill="#A8DADC" stroke="#2B2D42" stroke-width="2"/>
+            <!-- Child -->
+            <circle cx="250" cy="95" r="25" fill="#FFD6BA"/>
+            <path d="M225 88 Q250 60 275 88 Z" fill="#4A3525"/>
+            <circle cx="242" cy="94" r="3" fill="#2B2D42"/>
+            <circle cx="258" cy="94" r="3" fill="#2B2D42"/>
+            <path d="M225 122 L275 122 L280 195 L220 195 Z" fill="#90BE6D"/>
+          </svg>`
+        },
+        {
+          id: 3,
+          sentence: "세제 통에 세제를 붓습니다.",
+          keywords: ["세제 통", "세제", "붓습니다"],
+          connector: "그리고",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F0F8FF"/>
+            <!-- Top of Washing Machine -->
+            <rect x="45" y="110" width="230" height="130" rx="12" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
+            <!-- Open Detergent Drawer -->
+            <rect x="75" y="135" width="75" height="35" rx="6" fill="#DEE2E6" stroke="#2B2D42" stroke-width="2.5"/>
+            <!-- Detergent Bottle tilted -->
+            <g transform="rotate(-35 165 75)">
+              <rect x="145" y="45" width="48" height="65" rx="10" fill="#4CC9F0" stroke="#2B2D42" stroke-width="3"/>
+              <rect x="158" y="30" width="22" height="16" rx="3" fill="#FFBE0B" stroke="#2B2D42" stroke-width="2"/>
+            </g>
+            <!-- Liquid pouring -->
+            <path d="M132 88 Q115 115 112 145" fill="none" stroke="#48CAE4" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="105" cy="145" r="5" fill="#90E0EF"/>
+            <circle cx="122" cy="146" r="6" fill="#90E0EF"/>
+          </svg>`
+        },
+        {
+          id: 4,
+          sentence: "세탁기 문을 닫고 시작 버튼을 누릅니다.",
+          keywords: ["문을 닫고", "시작 버튼", "누릅니다"],
+          connector: "계속해서",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F0F8FF"/>
+            <rect x="55" y="45" width="160" height="185" rx="14" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
+            <rect x="55" y="45" width="160" height="38" rx="10" fill="#E9ECEF" stroke="#2B2D42" stroke-width="2.5"/>
+            <!-- Start Button -->
+            <circle cx="182" cy="64" r="11" fill="#2EC4B6" stroke="#2B2D42" stroke-width="2.5"/>
+            <!-- Finger pressing -->
+            <path d="M245 78 L195 66" stroke="#FFD6BA" stroke-width="14" stroke-linecap="round"/>
+            <text x="172" y="40" font-size="18" font-weight="bold" fill="#FF595E">딸깍! ✨</text>
+            <!-- Spinning drum with bubbles -->
+            <circle cx="135" cy="150" r="50" fill="#90E0EF" stroke="#2B2D42" stroke-width="3"/>
+            <circle cx="120" cy="135" r="10" fill="white" opacity="0.8"/>
+            <circle cx="150" cy="158" r="12" fill="white" opacity="0.8"/>
+            <circle cx="128" cy="168" r="7" fill="white" opacity="0.8"/>
+          </svg>`
+        },
+        {
+          id: 5,
+          sentence: "세탁이 끝나고 깨끗한 옷을 꺼냅니다.",
+          keywords: ["세탁이 끝나고", "깨끗한 옷", "꺼냅니다"],
+          connector: "세탁이 끝나면",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F0F8FF"/>
+            <rect x="0" y="195" width="320" height="45" fill="#D8E2DC"/>
+            <rect x="55" y="55" width="130" height="145" rx="12" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
+            <circle cx="120" cy="135" r="40" fill="#495057" stroke="#2B2D42" stroke-width="3"/>
+            <!-- Clean sparkling shirt -->
+            <path d="M165 95 L195 85 L225 95 L235 120 L215 125 L215 155 L175 155 L175 125 L155 120 Z" fill="#FFFFFF" stroke="#4CC9F0" stroke-width="3"/>
+            <text x="155" y="82" font-size="22">✨</text>
+            <text x="225" y="85" font-size="22">✨</text>
+            <!-- Basket waiting -->
+            <path d="M210 155 L220 195 L285 195 L295 155 Z" fill="#F4A261" stroke="#2B2D42" stroke-width="3"/>
+          </svg>`
+        },
+        {
+          id: 6,
+          sentence: "빨래 건조대에 옷을 반듯하게 멉니다.",
+          keywords: ["빨래 건조대", "옷", "반듯하게 멉니다"],
+          connector: "마지막으로",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F0F8FF"/>
+            <rect x="0" y="195" width="320" height="45" fill="#D8E2DC"/>
+            <!-- Drying Rack -->
+            <line x1="45" y1="85" x2="225" y2="85" stroke="#6C757D" stroke-width="5" stroke-linecap="round"/>
+            <line x1="65" y1="85" x2="45" y2="195" stroke="#6C757D" stroke-width="5"/>
+            <line x1="205" y1="85" x2="225" y2="195" stroke="#6C757D" stroke-width="5"/>
+            <!-- Hanging Clothes -->
+            <path d="M75 85 L125 85 L125 145 L75 145 Z" fill="#A8DADC" stroke="#2B2D42" stroke-width="2.5"/>
+            <path d="M145 85 L195 85 L195 140 L145 140 Z" fill="#FFD166" stroke="#2B2D42" stroke-width="2.5"/>
+            <!-- Happy Child -->
+            <circle cx="260" cy="95" r="25" fill="#FFD6BA"/>
+            <path d="M235 88 Q260 60 285 88 Z" fill="#4A3525"/>
+            <path d="M248 93 Q253 88 258 93" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M264 93 Q269 88 274 93" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M254 103 Q260 110 266 103 Z" fill="#E63946"/>
+            <path d="M235 122 L285 122 L290 195 L230 195 Z" fill="#90BE6D"/>
+          </svg>`
+        }
+      ]
     },
-    {
-      id: 3,
-      sentence: "끓는 물에 면과 스프를 넣습니다.",
-      keywords: ["끓는 물", "면과 스프", "넣습니다"],
-      connector: "그리고",
-      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="240" fill="#FFF7E8"/>
-        <rect x="0" y="175" width="320" height="65" fill="#DEE2E6"/>
-        <!-- Boiling Pot -->
-        <rect x="105" y="125" width="110" height="52" rx="8" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
-        <ellipse cx="160" cy="126" rx="52" ry="10" fill="#4CC9F0"/>
-        <!-- Bubbles -->
-        <circle cx="135" cy="124" r="5" fill="white" opacity="0.8"/>
-        <circle cx="182" cy="125" r="6" fill="white" opacity="0.8"/>
-        <!-- Noodle Block dropping -->
-        <rect x="155" y="65" width="46" height="36" rx="6" fill="#FFD166" stroke="#E09F3E" stroke-width="2.5" transform="rotate(14 155 65)"/>
-        <path d="M160 76 Q172 72 184 76 Q192 80 198 76" fill="none" stroke="#E09F3E" stroke-width="2"/>
-        <path d="M158 86 Q170 82 182 86 Q190 90 196 86" fill="none" stroke="#E09F3E" stroke-width="2"/>
-        <!-- Soup Packet pouring -->
-        <rect x="102" y="52" width="34" height="42" rx="4" fill="#E63946" transform="rotate(-22 102 52)"/>
-        <circle cx="136" cy="98" r="2.5" fill="#D62828"/>
-        <circle cx="141" cy="106" r="2.5" fill="#D62828"/>
-        <circle cx="138" cy="113" r="2.5" fill="#D62828"/>
-        <!-- Steam -->
-        <path d="M85 110 Q75 95 85 80" fill="none" stroke="#ADB5BD" stroke-width="3.5" stroke-linecap="round"/>
-        <path d="M235 110 Q245 95 235 80" fill="none" stroke="#ADB5BD" stroke-width="3.5" stroke-linecap="round"/>
-      </svg>`
+    morning: {
+      title: "학교 가기 전 아침 준비",
+      icon: "🏫",
+      scenes: [
+        {
+          id: 1,
+          sentence: "알람 소리를 듣고 침대에서 일어납니다.",
+          keywords: ["알람 소리", "침대", "일어납니다"],
+          connector: "먼저",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFF8E7"/>
+            <!-- Window with sun -->
+            <rect x="35" y="30" width="75" height="75" rx="8" fill="#CAF0F8" stroke="#8D6E63" stroke-width="4"/>
+            <circle cx="65" cy="58" r="14" fill="#FFB703"/>
+            <!-- Bed -->
+            <rect x="85" y="140" width="180" height="65" rx="10" fill="#90E0EF" stroke="#2B2D42" stroke-width="3"/>
+            <rect x="75" y="110" width="18" height="95" rx="5" fill="#8D6E63"/>
+            <!-- Child stretching -->
+            <circle cx="155" cy="105" r="25" fill="#FFD6BA"/>
+            <path d="M130 98 Q155 70 180 98 Z" fill="#4A3525"/>
+            <circle cx="147" cy="104" r="3" fill="#2B2D42"/>
+            <circle cx="163" cy="104" r="3" fill="#2B2D42"/>
+            <ellipse cx="155" cy="115" rx="5" ry="6" fill="#E63946"/>
+            <!-- Alarm Clock -->
+            <circle cx="245" cy="112" r="18" fill="#FF595E" stroke="#2B2D42" stroke-width="2.5"/>
+            <circle cx="245" cy="112" r="13" fill="white"/>
+            <text x="218" y="85" font-size="16" font-weight="bold" fill="#FF595E">따르릉! ⏰</text>
+          </svg>`
+        },
+        {
+          id: 2,
+          sentence: "화장실에서 세수를 하고 양치질을 합니다.",
+          keywords: ["화장실", "세수", "양치질"],
+          connector: "그다음에",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#EBF8FF"/>
+            <!-- Mirror -->
+            <rect x="95" y="25" width="130" height="90" rx="14" fill="#FFFFFF" stroke="#90E0EF" stroke-width="5"/>
+            <!-- Sink -->
+            <path d="M85 160 L235 160 L215 195 L105 195 Z" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
+            <!-- Child brushing teeth -->
+            <circle cx="160" cy="95" r="28" fill="#FFD6BA"/>
+            <path d="M132 88 Q160 60 188 88 Z" fill="#4A3525"/>
+            <circle cx="150" cy="92" r="3" fill="#2B2D42"/>
+            <circle cx="170" cy="92" r="3" fill="#2B2D42"/>
+            <!-- Foam & Toothbrush -->
+            <circle cx="152" cy="108" r="6" fill="white" stroke="#90E0EF" stroke-width="2"/>
+            <circle cx="165" cy="109" r="7" fill="white" stroke="#90E0EF" stroke-width="2"/>
+            <line x1="165" y1="108" x2="215" y2="118" stroke="#FF595E" stroke-width="6" stroke-linecap="round"/>
+            <path d="M128 125 L192 125 L198 160 L122 160 Z" fill="#FFD166"/>
+          </svg>`
+        },
+        {
+          id: 3,
+          sentence: "옷장에서 깨끗한 옷을 꺼내 입습니다.",
+          keywords: ["옷장", "깨끗한 옷", "입습니다"],
+          connector: "그리고",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFF8E7"/>
+            <!-- Wardrobe -->
+            <rect x="40" y="35" width="115" height="175" rx="8" fill="#DDA15E" stroke="#2B2D42" stroke-width="3"/>
+            <line x1="97" y1="35" x2="97" y2="210" stroke="#2B2D42" stroke-width="2.5"/>
+            <!-- Child wearing neat shirt -->
+            <circle cx="220" cy="82" r="27" fill="#FFD6BA"/>
+            <path d="M193 75 Q220 46 247 75 Z" fill="#4A3525"/>
+            <circle cx="211" cy="81" r="3" fill="#2B2D42"/>
+            <circle cx="229" cy="81" r="3" fill="#2B2D42"/>
+            <path d="M214 92 Q220 98 226 92" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M185 112 L255 112 L265 165 L175 165 Z" fill="#4ECDC4" stroke="#2B2D42" stroke-width="2.5"/>
+            <rect x="192" y="165" width="56" height="45" fill="#3D5A80"/>
+          </svg>`
+        },
+        {
+          id: 4,
+          sentence: "식탁에서 아침밥을 맛있게 먹습니다.",
+          keywords: ["식탁", "아침밥", "먹습니다"],
+          connector: "계속해서",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFF8E7"/>
+            <circle cx="160" cy="80" r="27" fill="#FFD6BA"/>
+            <path d="M133 73 Q160 44 187 73 Z" fill="#4A3525"/>
+            <path d="M147 78 Q152 73 157 78" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M163 78 Q168 73 173 78" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M153 89 Q160 98 167 89 Z" fill="#E63946"/>
+            <path d="M125 108 L195 108 L205 165 L115 165 Z" fill="#4ECDC4"/>
+            <!-- Table -->
+            <rect x="25" y="165" width="270" height="75" rx="8" fill="#E6CCB2"/>
+            <!-- Rice Bowl & Soup Bowl -->
+            <path d="M95 145 Q95 168 125 168 Q155 168 155 145 Z" fill="#FFFFFF" stroke="#2B2D42" stroke-width="2.5"/>
+            <path d="M100 145 Q125 130 150 145 Z" fill="#FFFFFF" stroke="#ADB5BD" stroke-width="2"/>
+            <path d="M170 145 Q170 168 200 168 Q230 168 230 145 Z" fill="#FFBE0B" stroke="#2B2D42" stroke-width="2.5"/>
+          </svg>`
+        },
+        {
+          id: 5,
+          sentence: "알림장을 확인하고 책가방을 챙깁니다.",
+          keywords: ["알림장", "책가방", "챙깁니다"],
+          connector: "밥을 먹은 뒤",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFF8E7"/>
+            <rect x="0" y="180" width="320" height="60" fill="#E6CCB2"/>
+            <!-- Backpack -->
+            <rect x="75" y="95" width="85" height="95" rx="18" fill="#FF595E" stroke="#2B2D42" stroke-width="3"/>
+            <rect x="92" y="135" width="50" height="40" rx="8" fill="#FFCA3A" stroke="#2B2D42" stroke-width="2"/>
+            <!-- Notebook & Pencil going in -->
+            <rect x="115" y="52" width="42" height="54" rx="4" fill="#90E0EF" stroke="#2B2D42" stroke-width="2.5" transform="rotate(12 115 52)"/>
+            <text x="135" y="82" font-size="11" font-weight="bold" fill="#2B2D42" text-anchor="middle">알림장</text>
+            <!-- Child -->
+            <circle cx="225" cy="95" r="26" fill="#FFD6BA"/>
+            <path d="M199 88 Q225 60 251 88 Z" fill="#4A3525"/>
+            <circle cx="216" cy="94" r="3" fill="#2B2D42"/>
+            <circle cx="232" cy="94" r="3" fill="#2B2D42"/>
+            <path d="M198 122 L252 122 L258 180 L192 180 Z" fill="#4ECDC4"/>
+          </svg>`
+        },
+        {
+          id: 6,
+          sentence: "현관에서 신발을 신고 학교에 갑니다.",
+          keywords: ["현관", "신발을 신고", "학교에 갑니다"],
+          connector: "마지막으로",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#EBF8FF"/>
+            <rect x="0" y="190" width="320" height="50" fill="#90BE6D"/>
+            <!-- School Building in background -->
+            <rect x="185" y="75" width="110" height="115" fill="#FFD166" stroke="#2B2D42" stroke-width="2.5"/>
+            <polygon points="175,75 240,35 305,75" fill="#E63946" stroke="#2B2D42" stroke-width="2.5"/>
+            <circle cx="240" cy="60" r="10" fill="white" stroke="#2B2D42" stroke-width="2"/>
+            <!-- Child walking with backpack -->
+            <rect x="65" y="105" width="35" height="50" rx="10" fill="#FF595E" stroke="#2B2D42" stroke-width="2.5"/>
+            <circle cx="105" cy="82" r="26" fill="#FFD6BA"/>
+            <path d="M79 75 Q105 46 131 75 Z" fill="#4A3525"/>
+            <circle cx="112" cy="81" r="3" fill="#2B2D42"/>
+            <path d="M108 92 Q115 97 120 92" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M82 108 L128 108 L134 162 L76 162 Z" fill="#4ECDC4"/>
+            <!-- Sneakers -->
+            <ellipse cx="92" cy="188" rx="14" ry="8" fill="#FF595E" stroke="#2B2D42" stroke-width="2"/>
+            <ellipse cx="122" cy="188" rx="14" ry="8" fill="#FF595E" stroke="#2B2D42" stroke-width="2"/>
+          </svg>`
+        }
+      ]
     },
-    {
-      id: 4,
-      sentence: "젓가락으로 면을 저으며 끓입니다.",
-      keywords: ["젓가락", "면을 저으며", "끓입니다"],
-      connector: "계속해서",
-      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="240" fill="#FFF7E8"/>
-        <rect x="0" y="180" width="320" height="60" fill="#DEE2E6"/>
-        <!-- Child -->
-        <circle cx="160" cy="70" r="26" fill="#FFD6BA"/>
-        <path d="M134 64 Q160 36 186 64 Q188 48 160 42 Q132 48 134 64 Z" fill="#4A3525"/>
-        <circle cx="151" cy="69" r="3" fill="#2B2D42"/>
-        <circle cx="169" cy="69" r="3" fill="#2B2D42"/>
-        <path d="M155 79 Q160 84 165 79" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M126 98 L194 98 L202 145 L118 145 Z" fill="#FFD166"/>
-        <!-- Pot with red soup & noodles -->
-        <rect x="105" y="132" width="110" height="50" rx="8" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
-        <ellipse cx="160" cy="133" rx="52" ry="10" fill="#E63946"/>
-        <!-- Wavy noodles -->
-        <path d="M135 132 Q145 115 155 132 Q165 115 175 132" fill="none" stroke="#FFD166" stroke-width="4" stroke-linecap="round"/>
-        <!-- Chopsticks -->
-        <line x1="115" y1="88" x2="156" y2="132" stroke="#8D5B4C" stroke-width="4" stroke-linecap="round"/>
-        <line x1="122" y1="82" x2="162" y2="130" stroke="#8D5B4C" stroke-width="4" stroke-linecap="round"/>
-      </svg>`
+    store: {
+      title: "편의점에서 간식 사기",
+      icon: "🏪",
+      scenes: [
+        {
+          id: 1,
+          sentence: "편의점에 들어가서 장바구니를 듭니다.",
+          keywords: ["편의점", "장바구니", "듭니다"],
+          connector: "먼저",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F4F9F9"/>
+            <!-- Store Sign -->
+            <rect x="40" y="20" width="240" height="36" rx="8" fill="#2EC4B6" stroke="#2B2D42" stroke-width="2.5"/>
+            <text x="160" y="44" font-size="18" font-weight="bold" fill="white" text-anchor="middle">24시 편의점</text>
+            <!-- Child holding basket -->
+            <circle cx="155" cy="95" r="26" fill="#FFD6BA"/>
+            <path d="M129 88 Q155 60 181 88 Z" fill="#4A3525"/>
+            <circle cx="146" cy="94" r="3" fill="#2B2D42"/>
+            <circle cx="164" cy="94" r="3" fill="#2B2D42"/>
+            <path d="M125 122 L185 122 L192 185 L118 185 Z" fill="#FF9F1C"/>
+            <!-- Basket -->
+            <path d="M180 145 L245 145 L235 190 L190 190 Z" fill="#FF595E" stroke="#2B2D42" stroke-width="2.5"/>
+            <path d="M190 145 Q212 115 235 145" fill="none" stroke="#2B2D42" stroke-width="3"/>
+          </svg>`
+        },
+        {
+          id: 2,
+          sentence: "진열대에서 먹고 싶은 과자와 우유를 고릅니다.",
+          keywords: ["진열대", "과자와 우유", "고릅니다"],
+          connector: "그다음에",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F4F9F9"/>
+            <!-- Shelves -->
+            <rect x="35" y="40" width="145" height="165" rx="6" fill="#E9ECEF" stroke="#2B2D42" stroke-width="2.5"/>
+            <line x1="35" y1="95" x2="180" y2="95" stroke="#2B2D42" stroke-width="3"/>
+            <line x1="35" y1="150" x2="180" y2="150" stroke="#2B2D42" stroke-width="3"/>
+            <!-- Snacks & Milk -->
+            <rect x="52" y="58" width="32" height="36" rx="4" fill="#FFBE0B" stroke="#2B2D42" stroke-width="2"/>
+            <rect x="98" y="58" width="32" height="36" rx="4" fill="#FF595E" stroke="#2B2D42" stroke-width="2"/>
+            <rect x="55" y="110" width="26" height="38" rx="3" fill="#FFFFFF" stroke="#4CC9F0" stroke-width="2.5"/>
+            <rect x="98" y="110" width="26" height="38" rx="3" fill="#FFAFCC" stroke="#2B2D42" stroke-width="2"/>
+            <!-- Child picking -->
+            <circle cx="240" cy="95" r="26" fill="#FFD6BA"/>
+            <path d="M214 88 Q240 60 266 88 Z" fill="#4A3525"/>
+            <circle cx="231" cy="94" r="3" fill="#2B2D42"/>
+            <circle cx="249" cy="94" r="3" fill="#2B2D42"/>
+            <path d="M212 122 L268 122 L274 195 L206 195 Z" fill="#FF9F1C"/>
+          </svg>`
+        },
+        {
+          id: 3,
+          sentence: "계산대 앞에 줄을 서서 차례를 기다립니다.",
+          keywords: ["계산대", "줄을 서서", "기다립니다"],
+          connector: "그리고",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F4F9F9"/>
+            <rect x="0" y="195" width="320" height="45" fill="#DEE2E6"/>
+            <!-- Counter -->
+            <rect x="30" y="125" width="90" height="70" fill="#2EC4B6" stroke="#2B2D42" stroke-width="2.5"/>
+            <!-- Person 1 -->
+            <circle cx="155" cy="95" r="22" fill="#FFD6BA"/>
+            <rect x="135" y="118" width="40" height="77" rx="8" fill="#577590"/>
+            <!-- Child waiting behind -->
+            <circle cx="235" cy="102" r="24" fill="#FFD6BA"/>
+            <path d="M211 95 Q235 68 259 95 Z" fill="#4A3525"/>
+            <circle cx="227" cy="101" r="3" fill="#2B2D42"/>
+            <rect x="212" y="126" width="46" height="69" rx="8" fill="#FF9F1C"/>
+          </svg>`
+        },
+        {
+          id: 4,
+          sentence: "점원에게 물건을 건네고 카드로 계산합니다.",
+          keywords: ["점원", "물건", "카드로 계산합니다"],
+          connector: "차례가 되면",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F4F9F9"/>
+            <!-- Cashier -->
+            <circle cx="95" cy="85" r="25" fill="#FFD6BA"/>
+            <path d="M68 112 L122 112 L128 155 L62 155 Z" fill="#2EC4B6"/>
+            <!-- Counter -->
+            <rect x="25" y="150" width="270" height="90" fill="#E9ECEF" stroke="#2B2D42" stroke-width="3"/>
+            <!-- Card Terminal & Card -->
+            <rect x="145" y="118" width="36" height="32" rx="5" fill="#495057"/>
+            <rect x="188" y="112" width="42" height="26" rx="4" fill="#FFBE0B" stroke="#2B2D42" stroke-width="2"/>
+            <text x="175" y="98" font-size="16" font-weight="bold" fill="#2EC4B6">삑! 결제 완료</text>
+          </svg>`
+        },
+        {
+          id: 5,
+          sentence: "계산을 마친 간식과 영수증을 받습니다.",
+          keywords: ["간식", "영수증", "받습니다"],
+          connector: "계산이 끝나면",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F4F9F9"/>
+            <!-- Shopping Bag with snacks -->
+            <path d="M95 110 L225 110 L215 205 L105 205 Z" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
+            <rect x="115" y="75" width="38" height="42" rx="4" fill="#FFBE0B" stroke="#2B2D42" stroke-width="2"/>
+            <rect x="165" y="78" width="30" height="38" rx="4" fill="#4CC9F0" stroke="#2B2D42" stroke-width="2"/>
+            <!-- Receipt -->
+            <rect x="225" y="85" width="42" height="65" fill="#FFFFFF" stroke="#6C757D" stroke-width="2"/>
+            <line x1="232" y1="100" x2="260" y2="100" stroke="#ADB5BD" stroke-width="2.5"/>
+            <line x1="232" y1="115" x2="260" y2="115" stroke="#ADB5BD" stroke-width="2.5"/>
+            <line x1="232" y1="130" x2="252" y2="130" stroke="#ADB5BD" stroke-width="2.5"/>
+          </svg>`
+        },
+        {
+          id: 6,
+          sentence: "편의점 밖으로 나와 집으로 걸어갑니다.",
+          keywords: ["편의점 밖", "집으로", "걸어갑니다"],
+          connector: "마지막으로",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#EBF8FF"/>
+            <rect x="0" y="190" width="320" height="50" fill="#90BE6D"/>
+            <!-- Happy Child walking with bag -->
+            <circle cx="150" cy="82" r="27" fill="#FFD6BA"/>
+            <path d="M123 75 Q150 46 177 75 Z" fill="#4A3525"/>
+            <path d="M137 80 Q142 75 147 80" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M153 80 Q158 75 163 80" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M143 91 Q150 99 157 91 Z" fill="#E63946"/>
+            <path d="M122 110 L178 110 L185 170 L115 170 Z" fill="#FF9F1C"/>
+            <!-- Bag in hand -->
+            <rect x="185" y="135" width="36" height="42" rx="6" fill="#FFFFFF" stroke="#2B2D42" stroke-width="2.5"/>
+            <text x="95" y="85" font-size="22">🎵</text>
+            <text x="205" y="85" font-size="22">✨</text>
+          </svg>`
+        }
+      ]
     },
-    {
-      id: 5,
-      sentence: "불을 끄고 그릇에 라면을 담습니다.",
-      keywords: ["불을 끄고", "그릇", "라면을 담습니다"],
-      connector: "다 익으면",
-      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="240" fill="#FFF7E8"/>
-        <rect x="0" y="175" width="320" height="65" fill="#E6CCB2"/>
-        <!-- Mom with oven mitts pouring -->
-        <circle cx="225" cy="72" r="25" fill="#FFD6BA"/>
-        <path d="M197 76 Q199 38 225 38 Q251 38 253 76 L255 102 L195 102 Z" fill="#5C4033"/>
-        <circle cx="225" cy="75" r="22" fill="#FFD6BA"/>
-        <circle cx="217" cy="74" r="2.8" fill="#2B2D42"/>
-        <circle cx="233" cy="74" r="2.8" fill="#2B2D42"/>
-        <path d="M220 84 Q225 89 230 84" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M195 102 L255 102 L262 175 L188 175 Z" fill="#F28482"/>
-        <!-- Tilted Pot -->
-        <g transform="rotate(-28 155 115)">
-          <rect x="120" y="95" width="72" height="38" rx="6" fill="#8D99AE" stroke="#2B2D42" stroke-width="3"/>
-          <rect x="192" y="102" width="16" height="18" rx="6" fill="#FFB703" stroke="#2B2D42" stroke-width="2"/>
-        </g>
-        <!-- Noodles & Soup pouring into bowl -->
-        <path d="M122 122 Q115 142 118 158" fill="none" stroke="#FFD166" stroke-width="6" stroke-linecap="round"/>
-        <path d="M128 124 Q122 144 125 158" fill="none" stroke="#E63946" stroke-width="4" stroke-linecap="round"/>
-        <!-- Serving Bowl -->
-        <path d="M75 155 Q75 188 120 188 Q165 188 165 155 Z" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
-        <ellipse cx="120" cy="155" rx="45" ry="7" fill="#E63946"/>
-      </svg>`
-    },
-    {
-      id: 6,
-      sentence: "식탁에 앉아 라면을 맛있게 먹습니다.",
-      keywords: ["식탁에 앉아", "라면", "맛있게 먹습니다"],
-      connector: "마지막으로",
-      svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-        <rect width="320" height="240" fill="#FFF7E8"/>
-        <!-- Happy Child -->
-        <circle cx="160" cy="76" r="28" fill="#FFD6BA"/>
-        <path d="M132 70 Q160 40 188 70 Q190 52 160 46 Q130 52 132 70 Z" fill="#4A3525"/>
-        <!-- Smiling Eyes -->
-        <path d="M146 74 Q151 69 156 74" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M164 74 Q169 69 174 74" fill="none" stroke="#2B2D42" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- Happy Mouth -->
-        <path d="M152 84 Q160 95 168 84 Z" fill="#E63946"/>
-        <path d="M122 106 L198 106 L206 165 L114 165 Z" fill="#FFD166"/>
-        <!-- Dining Table -->
-        <rect x="20" y="165" width="280" height="75" rx="8" fill="#DDA15E"/>
-        <!-- Bowl on table -->
-        <path d="M118 142 Q118 174 160 174 Q202 174 202 142 Z" fill="#FFFFFF" stroke="#2B2D42" stroke-width="3"/>
-        <ellipse cx="160" cy="142" rx="42" ry="7" fill="#E63946"/>
-        <!-- Noodles lifted with chopsticks -->
-        <path d="M152 142 L152 104 L166 142" fill="none" stroke="#FFD166" stroke-width="4"/>
-        <line x1="142" y1="102" x2="188" y2="108" stroke="#8D5B4C" stroke-width="3.5" stroke-linecap="round"/>
-        <line x1="142" y1="108" x2="188" y2="112" stroke="#8D5B4C" stroke-width="3.5" stroke-linecap="round"/>
-        <!-- Sparkles -->
-        <text x="82" y="95" font-size="22">✨</text>
-        <text x="218" y="95" font-size="22">😋</text>
-      </svg>`
+    plant: {
+      title: "화분에 씨앗 심기",
+      icon: "🌱",
+      scenes: [
+        {
+          id: 1,
+          sentence: "빈 화분과 흙, 씨앗을 준비합니다.",
+          keywords: ["빈 화분", "흙", "씨앗"],
+          connector: "먼저",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F3F8F2"/>
+            <rect x="0" y="175" width="320" height="65" fill="#E6CCB2"/>
+            <!-- Empty Pot -->
+            <path d="M55 110 L125 110 L115 175 L65 175 Z" fill="#E07A5F" stroke="#2B2D42" stroke-width="3"/>
+            <rect x="50" y="100" width="80" height="14" rx="4" fill="#E07A5F" stroke="#2B2D42" stroke-width="3"/>
+            <!-- Soil Bag -->
+            <rect x="150" y="95" width="65" height="80" rx="8" fill="#8D6E63" stroke="#2B2D42" stroke-width="3"/>
+            <text x="182" y="140" font-size="14" font-weight="bold" fill="white" text-anchor="middle">흙</text>
+            <!-- Seed Packet -->
+            <rect x="235" y="115" width="48" height="60" rx="6" fill="#FFD166" stroke="#2B2D42" stroke-width="2.5"/>
+            <circle cx="259" cy="145" r="7" fill="#588157"/>
+          </svg>`
+        },
+        {
+          id: 2,
+          sentence: "모종삽으로 화분에 흙을 담습니다.",
+          keywords: ["모종삽", "화분", "흙을 담습니다"],
+          connector: "그다음에",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F3F8F2"/>
+            <rect x="0" y="180" width="320" height="60" fill="#E6CCB2"/>
+            <!-- Pot -->
+            <path d="M105 115 L195 115 L182 185 L118 185 Z" fill="#E07A5F" stroke="#2B2D42" stroke-width="3"/>
+            <rect x="98" y="105" width="104" height="14" rx="4" fill="#E07A5F" stroke="#2B2D42" stroke-width="3"/>
+            <!-- Trowel with soil -->
+            <path d="M165 65 L205 85 L185 102 L150 82 Z" fill="#6D4C41" stroke="#2B2D42" stroke-width="2.5"/>
+            <line x1="205" y1="85" x2="245" y2="65" stroke="#FF9F1C" stroke-width="8" stroke-linecap="round"/>
+            <!-- Soil falling -->
+            <circle cx="150" cy="96" r="4" fill="#5D4037"/>
+            <circle cx="162" cy="102" r="4" fill="#5D4037"/>
+          </svg>`
+        },
+        {
+          id: 3,
+          sentence: "손가락으로 흙을 살짝 파고 씨앗을 넣습니다.",
+          keywords: ["흙을 파고", "씨앗", "넣습니다"],
+          connector: "그리고",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F3F8F2"/>
+            <rect x="0" y="180" width="320" height="60" fill="#E6CCB2"/>
+            <!-- Pot filled with soil -->
+            <path d="M105 115 L195 115 L182 185 L118 185 Z" fill="#E07A5F" stroke="#2B2D42" stroke-width="3"/>
+            <ellipse cx="150" cy="112" rx="46" ry="12" fill="#6D4C41" stroke="#2B2D42" stroke-width="2.5"/>
+            <!-- Seeds dropping -->
+            <ellipse cx="142" cy="88" rx="5" ry="7" fill="#FFB703" stroke="#2B2D42" stroke-width="2"/>
+            <ellipse cx="160" cy="95" rx="5" ry="7" fill="#FFB703" stroke="#2B2D42" stroke-width="2"/>
+            <!-- Hand -->
+            <path d="M195 55 L162 78" stroke="#FFD6BA" stroke-width="14" stroke-linecap="round"/>
+          </svg>`
+        },
+        {
+          id: 4,
+          sentence: "씨앗 위에 흙을 다시 살살 덮어줍니다.",
+          keywords: ["씨앗 위", "흙을", "살살 덮어줍니다"],
+          connector: "계속해서",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F3F8F2"/>
+            <rect x="0" y="180" width="320" height="60" fill="#E6CCB2"/>
+            <path d="M105 115 L195 115 L182 185 L118 185 Z" fill="#E07A5F" stroke="#2B2D42" stroke-width="3"/>
+            <ellipse cx="150" cy="112" rx="46" ry="14" fill="#6D4C41" stroke="#2B2D42" stroke-width="2.5"/>
+            <!-- Gentle hands patting soil -->
+            <ellipse cx="132" cy="95" rx="18" ry="10" fill="#FFD6BA" stroke="#2B2D42" stroke-width="2"/>
+            <ellipse cx="168" cy="95" rx="18" ry="10" fill="#FFD6BA" stroke="#2B2D42" stroke-width="2"/>
+            <text x="150" y="72" font-size="16" font-weight="bold" fill="#588157" text-anchor="middle">토닥토닥 🌱</text>
+          </svg>`
+        },
+        {
+          id: 5,
+          sentence: "물뿌리개로 화분에 물을 줍니다.",
+          keywords: ["물뿌리개", "화분", "물을 줍니다"],
+          connector: "흙을 덮은 뒤",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#F3F8F2"/>
+            <rect x="0" y="185" width="320" height="55" fill="#E6CCB2"/>
+            <path d="M85 125 L165 125 L155 188 L95 188 Z" fill="#E07A5F" stroke="#2B2D42" stroke-width="3"/>
+            <ellipse cx="125" cy="123" rx="40" ry="10" fill="#5D4037"/>
+            <!-- Watering Can -->
+            <g transform="rotate(-25 215 75)">
+              <rect x="195" y="55" width="55" height="42" rx="8" fill="#4CC9F0" stroke="#2B2D42" stroke-width="2.5"/>
+              <line x1="195" y1="80" x2="160" y2="62" stroke="#4CC9F0" stroke-width="8" stroke-linecap="round"/>
+            </g>
+            <!-- Water drops -->
+            <circle cx="130" cy="92" r="4" fill="#48CAE4"/>
+            <circle cx="142" cy="102" r="4" fill="#48CAE4"/>
+            <circle cx="120" cy="106" r="4" fill="#48CAE4"/>
+          </svg>`
+        },
+        {
+          id: 6,
+          sentence: "햇볕이 잘 드는 창가에 화분을 놓습니다.",
+          keywords: ["햇볕", "창가", "화분을 놓습니다"],
+          connector: "마지막으로",
+          svg: `<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="240" fill="#FFFDF5"/>
+            <!-- Window -->
+            <rect x="70" y="25" width="180" height="145" rx="10" fill="#CAF0F8" stroke="#8D6E63" stroke-width="5"/>
+            <line x1="160" y1="25" x2="160" y2="170" stroke="#8D6E63" stroke-width="4"/>
+            <!-- Bright Sun -->
+            <circle cx="215" cy="62" r="20" fill="#FFB703"/>
+            <!-- Windowsill -->
+            <rect x="55" y="170" width="210" height="16" rx="4" fill="#DDA15E" stroke="#2B2D42" stroke-width="2.5"/>
+            <!-- Pot with cute sprout -->
+            <path d="M130 128 L190 128 L182 170 L138 170 Z" fill="#E07A5F" stroke="#2B2D42" stroke-width="2.5"/>
+            <line x1="160" y1="128" x2="160" y2="102" stroke="#588157" stroke-width="4" stroke-linecap="round"/>
+            <ellipse cx="148" cy="102" rx="12" ry="6" fill="#80ED99" stroke="#2B2D42" stroke-width="2" transform="rotate(-20 148 102)"/>
+            <ellipse cx="172" cy="102" rx="12" ry="6" fill="#80ED99" stroke="#2B2D42" stroke-width="2" transform="rotate(20 172 102)"/>
+          </svg>`
+        }
+      ]
     }
-  ];
+  };
 
-  // Sound Effects using Web Audio API (No external files needed)
+  let currentTopicKey = "ramen";
+  function getSCENES() {
+    return TOPICS[currentTopicKey].scenes;
+  }
+
+  // Sound Effects
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   function playTone(freq, type, duration, delay = 0) {
     if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -1128,6 +1653,33 @@
     setTimeout(() => t.classList.remove('show'), 2600);
   }
 
+  // Topic Switching
+  function selectTopic(topicKey) {
+    playClickSound();
+    currentTopicKey = topicKey;
+    const topic = TOPICS[topicKey];
+
+    document.querySelectorAll('.topic-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.topic === topicKey);
+    });
+
+    document.getElementById('header-icon').textContent = topic.icon;
+    document.getElementById('header-title').textContent = `일상생활 이야기 게임: ${topic.title}`;
+
+    // Reset stage progress badges
+    document.querySelectorAll('.stage-tab').forEach(tab => tab.classList.remove('completed'));
+
+    // Reset all stages for the new topic
+    currentScene2Idx = 0;
+    resetStage1();
+    renderScene2();
+    setupStage3(2);
+    setupStage4();
+
+    switchStage(1);
+    showToast(`${topic.icon} '${topic.title}' 주제로 변경되었습니다!`);
+  }
+
   // Stage Switching
   function switchStage(stageNum) {
     playClickSound();
@@ -1143,6 +1695,7 @@
     if (stageNum === 3 && document.getElementById('flip-grid').children.length === 0) {
       setupStage3(2);
     }
+    if (stageNum === 4) setupStage4();
   }
 
   // ==================== STAGE 1: ORDERING ====================
@@ -1181,11 +1734,12 @@
     slotsState = [null, null, null, null, null, null];
     selectedCardId = null;
     document.getElementById('to-stage-2-btn').style.display = 'none';
-    const shuffled = [...SCENES].sort(() => Math.random() - 0.5);
+    const shuffled = [...getSCENES()].sort(() => Math.random() - 0.5);
     renderStage1(shuffled);
   }
 
   function renderStage1(poolOrder = null) {
+    const SCENES = getSCENES();
     const slots = document.querySelectorAll('.slot-box');
     slots.forEach((slot, idx) => {
       const cardId = slotsState[idx];
@@ -1236,14 +1790,12 @@
       placeCardInSlot(selectedCardId, slotIdx);
       selectedCardId = null;
     } else if (slotsState[slotIdx] !== null) {
-      // Return card to pool
       slotsState[slotIdx] = null;
       renderStage1();
     }
   }
 
   function placeCardInSlot(cardId, slotIdx) {
-    // Remove card if already in another slot
     const existingIdx = slotsState.indexOf(cardId);
     if (existingIdx !== -1) slotsState[existingIdx] = null;
     slotsState[slotIdx] = cardId;
@@ -1275,7 +1827,7 @@
 
     if (allCorrect) {
       playSuccessSound();
-      showToast("🎉 대단해요! 라면 끓이기 순서를 완벽하게 맞췄어요!");
+      showToast(`🎉 대단해요! '${TOPICS[currentTopicKey].title}' 순서를 완벽하게 맞췄어요!`);
       document.querySelector('.stage-tab[data-stage="1"]').classList.add('completed');
       document.getElementById('to-stage-2-btn').style.display = 'inline-flex';
     } else {
@@ -1288,7 +1840,7 @@
   let currentScene2Idx = 0;
 
   function renderScene2() {
-    const scene = SCENES[currentScene2Idx];
+    const scene = getSCENES()[currentScene2Idx];
     document.getElementById('scene2-counter').textContent = `장면 ${currentScene2Idx + 1} / 6`;
     document.getElementById('announcer-art').innerHTML = scene.svg;
     document.getElementById('scene2-input').value = '';
@@ -1326,7 +1878,7 @@
 
   function showKeywordHint() {
     playClickSound();
-    const scene = SCENES[currentScene2Idx];
+    const scene = getSCENES()[currentScene2Idx];
     const chips = scene.keywords.map(k => `<span class="keyword-chip">${k}</span>`).join('');
     document.getElementById('scene2-hint-box').innerHTML = `
       <div style="font-size:0.9rem; color:var(--muted); margin-bottom:4px;">💡 이 단어들을 넣어서 문장을 만들어 보세요:</div>
@@ -1336,7 +1888,7 @@
 
   function showFullAnswer2() {
     playSuccessSound();
-    const scene = SCENES[currentScene2Idx];
+    const scene = getSCENES()[currentScene2Idx];
     document.getElementById('scene2-hint-box').innerHTML = `
       <div style="font-size:0.9rem; color:var(--muted);">✅ 모범 문장:</div>
       <div class="answer-sentence">"${scene.sentence}"</div>
@@ -1356,7 +1908,7 @@
   }
 
   function speakScene2() {
-    speakText(SCENES[currentScene2Idx].sentence);
+    speakText(getSCENES()[currentScene2Idx].sentence);
   }
 
   // ==================== STAGE 3: STEPPING STONES ====================
@@ -1365,11 +1917,10 @@
     const grid = document.getElementById('flip-grid');
     grid.innerHTML = '';
 
-    // Pick random indices to flip
     const indices = [0, 1, 2, 3, 4, 5].sort(() => Math.random() - 0.5);
     const hiddenSet = new Set(indices.slice(0, hideCount));
 
-    SCENES.forEach((scene, idx) => {
+    getSCENES().forEach((scene, idx) => {
       const isHidden = hiddenSet.has(idx);
       const card = document.createElement('div');
       card.className = 'flip-card' + (isHidden ? ' flipped' : '');
@@ -1397,6 +1948,28 @@
   }
 
   // ==================== STAGE 4: STORY CHEF ====================
+  function setupStage4() {
+    const topic = TOPICS[currentTopicKey];
+    const SCENES = getSCENES();
+    document.getElementById('stage4-topic-pill').textContent = `주제: ${topic.title}`;
+    document.getElementById('stage4-text').value = '';
+
+    const row = document.getElementById('connectors-row');
+    row.innerHTML = SCENES.map((s, idx) => {
+      const arrow = idx < 5 ? `<span class="connector-arrow">➔</span>` : '';
+      return `<button class="connector-chip" onclick="toggleConnector(this)">${idx + 1}. ${s.connector}</button>${arrow}`;
+    }).join('');
+
+    const scriptBox = document.getElementById('full-script-box');
+    scriptBox.style.display = 'none';
+    scriptBox.innerHTML = `
+      <strong style="font-family:'Jua'; font-size:1.2rem; color:var(--secondary-dark);">${topic.icon} ${topic.title} 전체 이야기 예시</strong>
+      <ol>
+        ${SCENES.map(s => `<li><strong>${s.connector},</strong> ${s.sentence}</li>`).join('')}
+      </ol>
+    `;
+  }
+
   function toggleConnector(btn) {
     playClickSound();
     btn.classList.toggle('used');
@@ -1415,7 +1988,7 @@
   }
 
   function speakFullStory() {
-    const fullText = SCENES.map(s => `${s.connector}, ${s.sentence}`).join(' ');
+    const fullText = getSCENES().map(s => `${s.connector}, ${s.sentence}`).join(' ');
     speakText(fullText);
   }
 
@@ -1434,11 +2007,16 @@
     const e2 = document.querySelector('input[name="eval2"]:checked')?.value || '미체크';
     const e3 = document.querySelector('input[name="eval3"]:checked')?.value || '미체크';
     const studentStory = document.getElementById('stage4-text').value.trim();
+    const topicTitle = TOPICS[currentTopicKey].title;
 
-    let report = `[이야기 재구성 훈련 결과 - 주제: 라면 끓이기]\n`;
-    report += `- 순서 배열 정확도: ${e1}\n`;
-    report += `- 문장 구성 요소: ${e2}\n`;
-    report += `- 시간 순서 접속사: ${e3}\n`;
+    let report = `[이야기 재구성 훈련 결과 - 주제: ${topicTitle}]
+`;
+    report += `- 순서 배열 정확도: ${e1}
+`;
+    report += `- 문장 구성 요소: ${e2}
+`;
+    report += `- 시간 순서 접속사: ${e3}
+`;
     if (studentStory) {
       report += `- 아동 산출 이야기: "${studentStory}"`;
     }
@@ -1452,6 +2030,7 @@
 
   // Initialize on load
   initStage1();
+  setupStage4();
 </script>
 </body>
 </html>
